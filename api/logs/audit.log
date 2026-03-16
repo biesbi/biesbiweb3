@@ -43,3 +43,6 @@
 2026-03-16 16:47:40 [AUDIT] action=upload.success user=admin-user-001 entity=product_image/100 ip=::1 META={"product_id":"prd-12888ad6b6eb","filename":"20260316_afe22c07c66b06397ba83618.png","size":70417}
 2026-03-16 17:03:21 [AUDIT] action=upload.success user=admin-user-001 entity=product_image/101 ip=::1 META={"product_id":"prd-12888ad6b6eb","filename":"20260316_c3665e4aa51d9bafab62ff83.png","size":70417}
 2026-03-16 17:03:22 [AUDIT] action=upload.success user=admin-user-001 entity=product_image/102 ip=::1 META={"product_id":"prd-12888ad6b6eb","filename":"20260316_463c928387350bba83d1a004.png","size":354302}
+2026-03-16 21:44:20 [AUDIT] action=upload.success user=admin-user-001 entity=product_image/103 ip=104.23.239.88 META={"product_id":"prd-221efc494ea3","filename":"20260316_14160737207bebc52c57e809.png","size":5824}
+2026-03-16 21:44:20 [AUDIT] action=upload.success user=admin-user-001 entity=product_image/104 ip=104.23.239.88 META={"product_id":"prd-221efc494ea3","filename":"20260316_97b5e437ee1380c9a64d678a.png","size":354302}
+2026-03-16 21:44:20 [AUDIT] action=upload.success user=admin-user-001 entity=product_image/105 ip=104.23.239.88 META={"product_id":"prd-221efc494ea3","filename":"20260316_689001deaa0f105db0426d48.png","size":461680}
