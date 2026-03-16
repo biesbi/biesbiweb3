@@ -1,0 +1,24 @@
+# Sublime Text cache files
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+*.sublime-workspace
+*.sublime-project
+
+# Other
+/__MACOSX
+/vendor
+/nbproject/
+/.idea
+.DS_Store
+.env
+.env.php
+*.lock
+
+# Backups and temporary files
+*_backup_*.html
+tmp_*
+*.bak
+dist/
+node_modules/
+.npm/

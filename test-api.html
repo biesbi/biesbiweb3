@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-box {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #0066cc;
+        }
+        .success { border-left-color: #00cc66; }
+        .error { border-left-color: #cc0000; }
+        pre {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 3px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+        button {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0052a3;
+        }
+    </style>
+</head>
+<body>
+    <h1>API Endpoint Test</h1>
+    <button onclick="testProducts()">Test /api/products</button>
+    <button onclick="testCategories()">Test /api/products/categories/list</button>
+    <button onclick="testBrands()">Test /api/products/brands/list</button>
+    <button onclick="testSummary()">Test /api/products?summary=1</button>
+
+    <div id="results"></div>
+
+    <script>
+        const resultsDiv = document.getElementById('results');
+
+        async function testEndpoint(name, url) {
+            const startTime = Date.now();
+            const box = document.createElement('div');
+            box.className = 'test-box';
+            box.innerHTML = `<strong>${name}</strong><br>Testing ${url}...`;
+            resultsDiv.insertBefore(box, resultsDiv.firstChild);
+
+            try {
+                const response = await fetch(url);
+                const duration = Date.now() - startTime;
+                const data = await response.json();
+
+                if (response.ok) {
+                    box.className = 'test-box success';
+                    box.innerHTML = `
+                        <strong>✓ ${name}</strong> (${duration}ms)<br>
+                        Status: ${response.status} OK<br>
+                        <details>
+                            <summary>Response Data (${Array.isArray(data) ? data.length + ' items' : typeof data})</summary>
+                            <pre>${JSON.stringify(data, null, 2).substring(0, 1000)}</pre>
+                        </details>
+                    `;
+                } else {
+                    box.className = 'test-box error';
+                    box.innerHTML = `
+                        <strong>✗ ${name}</strong> (${duration}ms)<br>
+                        Status: ${response.status}<br>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                box.className = 'test-box error';
+                box.innerHTML = `
+                    <strong>✗ ${name}</strong><br>
+                    Error: ${error.message}
+                `;
+            }
+        }
+
+        function testProducts() {
+            testEndpoint('Products List', '/api/products');
+        }
+
+        function testCategories() {
+            testEndpoint('Categories List', '/api/products/categories/list');
+        }
+
+        function testBrands() {
+            testEndpoint('Brands List', '/api/products/brands/list');
+        }
+
+        function testSummary() {
+            testEndpoint('Products Summary', '/api/products?summary=1');
+        }
+    </script>
+</body>
+</html>

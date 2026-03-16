@@ -1,0 +1,2623 @@
+<!doctype html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BoomerItems - Koleksiyonunuz icin aradiginiz hersey!</title>
+  <meta name="description"
+    content="Dunyanin en nadir LEGO setleri ve koleksiyon urunleri icin tek adres. BoomerItems ile koleksiyonunuzu buyutun.">
+  <meta name="keywords" content="LEGO, koleksiyon, diecast, figur, hot wheels, boomeritems">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="BoomerItems">
+  <meta property="og:title" content="BoomerItems - Koleksiyonunuz icin aradiginiz hersey!">
+  <meta property="og:description" content="En nadir LEGO setleri BoomerItems'ta.">
+  <meta property="og:image" content="/logo_v2_full.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon_zoomed.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      font-family: 'Outfit', 'Segoe UI', Tahoma, sans-serif !important;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #fff;
+    }
+
+    #root {
+      min-height: 100vh;
+    }
+
+    .stock-badge-out {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #7f1d1d;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      box-shadow: 0 8px 20px rgba(127, 29, 29, 0.2);
+      z-index: 3;
+    }
+
+    .stock-card-out {
+      position: relative;
+    }
+
+    .stock-card-out img {
+      filter: grayscale(1) opacity(0.72);
+    }
+
+    .stock-disabled-btn {
+      opacity: 0.55 !important;
+      pointer-events: none !important;
+      cursor: not-allowed !important;
+    }
+
+    .stock-inline-note {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.08);
+      color: #0f172a;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .stock-inline-note.low {
+      background: rgba(217, 119, 6, 0.14);
+      color: #92400e;
+    }
+
+    .stock-inline-note.out {
+      background: rgba(127, 29, 29, 0.14);
+      color: #991b1b;
+    }
+
+    .cart-qty-controls {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      padding: 4px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.06);
+    }
+
+    .cart-qty-btn {
+      width: 28px;
+      height: 28px;
+      border: 0;
+      border-radius: 999px;
+      background: #0f172a;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .cart-qty-btn[disabled] {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .cart-qty-value {
+      min-width: 22px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    /* ── Footer Override ─────────────────────────── */
+    .modern-footer {
+      background: #000000 !important;
+      color: #ffcc00 !important;
+      padding: 64px 0 0 !important;
+      margin-top: 80px !important;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .modern-footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #dd101f, #ff6b35, #ffcc00, #dd101f);
+      background-size: 200% 100%;
+      animation: footerBorderAnim 4s linear infinite;
+    }
+
+    @keyframes footerBorderAnim {
+      0% {
+        background-position: 0% 0;
+      }
+
+      100% {
+        background-position: 200% 0;
+      }
+    }
+
+    .footer-content {
+      max-width: 1200px !important;
+      margin: 0 auto !important;
+      padding: 0 32px !important;
+      display: grid !important;
+      grid-template-columns: 1.6fr 1fr 1.2fr !important;
+      gap: 48px !important;
+      align-items: start !important;
+    }
+
+    .footer-brand {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 16px !important;
+    }
+
+    .footer-brand .logo-img-footer,
+    .footer-brand img {
+      max-width: 180px !important;
+      height: auto !important;
+      filter: drop-shadow(0 0 24px rgba(255, 255, 255, 0.6)) drop-shadow(0 0 8px rgba(255, 255, 255, 0.9)) !important;
+    }
+
+    .footer-brand p {
+      color: #ffcc00 !important;
+      font-size: 14px !important;
+      line-height: 1.7 !important;
+      margin: 0 !important;
+      max-width: 280px;
+    }
+
+    .footer-brand .social-links,
+    .social-links {
+      display: flex !important;
+      gap: 10px !important;
+      margin-top: 8px !important;
+      flex-wrap: wrap;
+    }
+
+    .social-links a {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      padding: 8px 16px !important;
+      border-radius: 999px !important;
+      background: rgba(255, 255, 255, 0.08) !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      color: #ffcc00 !important;
+      font-size: 12px !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.08em !important;
+      text-decoration: none !important;
+      transition: all 0.2s !important;
+    }
+
+    .social-links a:hover {
+      background: #dd101f !important;
+      border-color: #dd101f !important;
+      color: #fff !important;
+      transform: translateY(-2px) !important;
+    }
+
+    .footer-links {
+      display: flex !important;
+      gap: 40px !important;
+    }
+
+    .footer-links>div {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 12px !important;
+    }
+
+    .footer-links h5,
+    .footer-contact h5 {
+      color: #ffcc00 !important;
+      font-size: 13px !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.1em !important;
+      text-transform: uppercase !important;
+      margin: 0 0 4px !important;
+      padding-bottom: 8px !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+    }
+
+    .footer-links ul {
+      list-style: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 10px !important;
+    }
+
+    .footer-links ul li a {
+      color: #ffcc00 !important;
+      text-decoration: none !important;
+      font-size: 14px !important;
+      transition: color 0.2s !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+    }
+
+    .footer-links ul li a::before {
+      content: '›' !important;
+      color: #dd101f !important;
+      font-size: 16px !important;
+      line-height: 1 !important;
+    }
+
+    .footer-links ul li a:hover {
+      color: #dd101f !important;
+    }
+
+    .footer-contact {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 12px !important;
+    }
+
+    .footer-contact p {
+      color: #ffcc00 !important;
+      font-size: 14px !important;
+      margin: 0 !important;
+      line-height: 1.6 !important;
+      display: flex !important;
+      align-items: flex-start !important;
+      gap: 10px !important;
+    }
+
+    .footer-contact p:nth-child(2)::before {
+      content: '✉' !important;
+      color: #dd101f !important;
+      flex-shrink: 0;
+    }
+
+    .footer-contact p:nth-child(3)::before {
+      content: '📞' !important;
+      flex-shrink: 0;
+    }
+
+    .footer-contact p:nth-child(4)::before {
+      content: '📍' !important;
+      flex-shrink: 0;
+    }
+
+    .footer-bottom {
+      max-width: 1200px !important;
+      margin: 48px auto 0 !important;
+      padding: 20px 32px !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    .footer-bottom p {
+      color: #ffffff !important;
+      font-size: 13px !important;
+      margin: 0 !important;
+      text-align: center !important;
+    }
+
+    .footer-bottom a {
+      color: #ffffff !important;
+      text-decoration: underline !important;
+      transition: color 0.2s !important;
+    }
+
+    .footer-bottom a:hover {
+      color: #dd101f !important;
+    }
+
+    @media (max-width: 900px) {
+      .footer-content {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 36px !important;
+      }
+
+      .footer-brand {
+        grid-column: 1 / -1 !important;
+      }
+    }
+
+    @media (max-width: 580px) {
+      .footer-content {
+        grid-template-columns: 1fr !important;
+        padding: 0 20px !important;
+      }
+
+      .footer-links {
+        flex-direction: column !important;
+        gap: 28px !important;
+      }
+
+      .modern-footer {
+        padding: 48px 0 0 !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+
+      .modern-header,
+      .modern-header.scrolled {
+        padding: 8px 14px !important;
+        height: auto !important;
+        min-height: 88px !important;
+      }
+
+      .header-container {
+        position: relative !important;
+        display: grid !important;
+        grid-template-columns: 1fr auto !important;
+        align-items: center !important;
+        gap: 10px !important;
+        padding: 6px 0 !important;
+      }
+
+      .logo-img {
+        height: 78px !important;
+        margin: 0 auto !important;
+        display: block !important;
+      }
+
+      .nav-menu {
+        position: absolute !important;
+        top: calc(100% + 10px) !important;
+        left: 0 !important;
+        right: 0 !important;
+        margin: 0 !important;
+        padding: 14px !important;
+        display: none !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        background: rgba(15, 23, 42, 0.96) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        border-radius: 18px !important;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.24) !important;
+        backdrop-filter: blur(18px) !important;
+        -webkit-backdrop-filter: blur(18px) !important;
+        z-index: 1200 !important;
+      }
+
+      .modern-header.scrolled .nav-menu {
+        background: rgba(255, 255, 255, 0.98) !important;
+        border-color: rgba(15, 23, 42, 0.08) !important;
+      }
+
+      .modern-header.mobile-nav-open .nav-menu {
+        display: flex !important;
+      }
+
+      .nav-link {
+        justify-content: center !important;
+        padding: 12px 14px !important;
+        border-radius: 12px !important;
+        background: rgba(255, 255, 255, 0.06) !important;
+      }
+
+      .modern-header.scrolled .nav-link {
+        background: rgba(15, 23, 42, 0.05) !important;
+      }
+
+      .nav-link::after {
+        display: none !important;
+      }
+
+      .header-actions {
+        width: auto !important;
+        justify-self: end !important;
+        justify-content: flex-end !important;
+        gap: 10px !important;
+        flex-wrap: nowrap !important;
+      }
+
+      .hide-on-mobile {
+        display: none !important;
+      }
+
+      .mobile-only {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+
+      .mobile-menu-toggle,
+      .mobile-only button {
+        min-width: 42px !important;
+        min-height: 42px !important;
+        border-radius: 12px !important;
+      }
+    }
+  </style>
+  <script>
+    (function () {
+      var originalFetch = window.fetch;
+      var legacyApiBase = 'https://boomeritems.com/api';
+      var currentApiBase = window.location.origin + '/api';
+      var paytrOverlay = null;
+
+      function createJsonResponse(payload, status) {
+        return new Response(JSON.stringify(payload), {
+          status: status,
+          headers: { 'Content-Type': 'application/json; charset=utf-8' }
+        });
+      }
+
+      function parseBody(init) {
+        if (!init || !init.body || typeof init.body !== 'string') {
+          return null;
+        }
+
+        try {
+          return JSON.parse(init.body);
+        } catch (error) {
+          return null;
+        }
+      }
+
+      function showAuthError(message) {
+        var text = message || 'E-posta veya şifre hatalı.';
+
+        window.setTimeout(function () {
+          window.alert(text);
+        }, 0);
+      }
+
+      function getStoredToken() {
+        try {
+          return localStorage.getItem('token') || '';
+        } catch (error) {
+          return '';
+        }
+      }
+
+      function withAuthHeader(input, init) {
+        var token = getStoredToken();
+        if (!token) {
+          return { input: input, init: init };
+        }
+
+        var url = typeof input === 'string'
+          ? input
+          : (input && typeof input.url === 'string' ? input.url : '');
+
+        if (url.indexOf('/api/') === -1) {
+          return { input: input, init: init };
+        }
+
+        if (input instanceof Request) {
+          var requestHeaders = new Headers(input.headers || {});
+          if (!requestHeaders.has('Authorization')) {
+            requestHeaders.set('Authorization', 'Bearer ' + token);
+            input = new Request(input, { headers: requestHeaders });
+          }
+          return { input: input, init: init };
+        }
+
+        var nextInit = Object.assign({}, init || {});
+        var headers = new Headers(nextInit.headers || {});
+        if (!headers.has('Authorization')) {
+          headers.set('Authorization', 'Bearer ' + token);
+        }
+        nextInit.headers = headers;
+        return { input: input, init: nextInit };
+      }
+
+      function normalizeCartStockValue(value) {
+        return String(value || '')
+          .toLocaleLowerCase('tr-TR')
+          .replace(/\s+/g, ' ')
+          .trim();
+      }
+
+      function clampCartItemsPayload(value) {
+        if (typeof value !== 'string') {
+          return value;
+        }
+
+        var stockState = window.__boomerStockState || { byId: {}, byName: {} };
+        var parsed;
+        try {
+          parsed = JSON.parse(value);
+        } catch (error) {
+          return value;
+        }
+
+        if (!Array.isArray(parsed)) {
+          return value;
+        }
+
+        var clamped = parsed.map(function (item) {
+          var stockInfo = stockState.byId[String(item.id || '')]
+            || stockState.byName[normalizeCartStockValue(item.title || item.name || '')]
+            || null;
+
+          if (!stockInfo) {
+            return item;
+          }
+
+          var availableQty = Math.max(0, Number(stockInfo.stock || 0));
+          if (!stockInfo.isActive || !stockInfo.inStock || availableQty <= 0) {
+            return null;
+          }
+
+          var currentQty = Math.max(1, Number(item.qty || item.quantity || 1));
+          var nextQty = Math.min(currentQty, availableQty);
+
+          return Object.assign({}, item, {
+            qty: nextQty,
+            quantity: nextQty
+          });
+        }).filter(Boolean);
+
+        return JSON.stringify(clamped);
+      }
+
+      if (!window.__cartStorageClampInstalled) {
+        window.__cartStorageClampInstalled = true;
+        var originalSetItem = localStorage.setItem.bind(localStorage);
+        localStorage.setItem = function (key, value) {
+          if (key === 'cartItems') {
+            value = clampCartItemsPayload(value);
+          }
+          return originalSetItem(key, value);
+        };
+      }
+
+      function closePaytrOverlay() {
+        if (paytrOverlay) {
+          paytrOverlay.remove();
+          paytrOverlay = null;
+        }
+      }
+
+      function openPaytrOverlay(payment) {
+        return new Promise(function (resolve) {
+          closePaytrOverlay();
+
+          var backdrop = document.createElement('div');
+          backdrop.style.position = 'fixed';
+          backdrop.style.inset = '0';
+          backdrop.style.background = 'rgba(15, 23, 42, 0.7)';
+          backdrop.style.zIndex = '99999';
+          backdrop.style.display = 'flex';
+          backdrop.style.alignItems = 'center';
+          backdrop.style.justifyContent = 'center';
+          backdrop.style.padding = '24px';
+
+          var card = document.createElement('div');
+          card.style.width = 'min(960px, 100%)';
+          card.style.height = 'min(760px, 100%)';
+          card.style.background = '#fff';
+          card.style.borderRadius = '24px';
+          card.style.overflow = 'hidden';
+          card.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.35)';
+          card.style.display = 'flex';
+          card.style.flexDirection = 'column';
+
+          var header = document.createElement('div');
+          header.style.display = 'flex';
+          header.style.justifyContent = 'space-between';
+          header.style.alignItems = 'center';
+          header.style.padding = '18px 20px';
+          header.style.borderBottom = '1px solid #e2e8f0';
+          header.innerHTML = '<strong>PAYTR Test Odeme</strong>';
+
+          var closeBtn = document.createElement('button');
+          closeBtn.type = 'button';
+          closeBtn.textContent = 'X';
+          closeBtn.style.border = '0';
+          closeBtn.style.background = 'transparent';
+          closeBtn.style.fontSize = '18px';
+          closeBtn.style.cursor = 'pointer';
+          closeBtn.addEventListener('click', function () {
+            closePaytrOverlay();
+            resolve('failed');
+          });
+          header.appendChild(closeBtn);
+
+          var iframe = document.createElement('iframe');
+          iframe.src = payment.payment_url;
+          iframe.style.flex = '1';
+          iframe.style.width = '100%';
+          iframe.style.border = '0';
+
+          function onMessage(event) {
+            var data = event.data || {};
+            if (data.source !== 'boomeritems-paytr' || data.orderId !== payment.merchant_oid) {
+              return;
+            }
+
+            window.removeEventListener('message', onMessage);
+            closePaytrOverlay();
+            resolve(data.status === 'success' ? 'success' : 'failed');
+          }
+
+          window.addEventListener('message', onMessage);
+
+          card.appendChild(header);
+          card.appendChild(iframe);
+          backdrop.appendChild(card);
+          document.body.appendChild(backdrop);
+          paytrOverlay = backdrop;
+        });
+      }
+
+      window.fetch = function (input, init) {
+        var body = parseBody(init);
+        var isOrderCreate = typeof input === 'string'
+          && input.indexOf('/api/orders') !== -1
+          && init
+          && String(init.method || 'GET').toUpperCase() === 'POST';
+        var isAuthLogin = typeof input === 'string'
+          && input.indexOf('/api/auth/login') !== -1
+          && init
+          && String(init.method || 'GET').toUpperCase() === 'POST';
+
+        if (typeof input === 'string' && input.indexOf(legacyApiBase) === 0) {
+          input = currentApiBase + input.slice(legacyApiBase.length);
+        } else if (input instanceof Request && input.url.indexOf(legacyApiBase) === 0) {
+          input = new Request(currentApiBase + input.url.slice(legacyApiBase.length), input);
+        }
+
+        var authedRequest = withAuthHeader(input, init);
+        input = authedRequest.input;
+        init = authedRequest.init;
+
+        return originalFetch.call(this, input, init).then(function (response) {
+          if (isAuthLogin && !response.ok) {
+            response.clone().json().then(function (payload) {
+              showAuthError((payload && payload.message) || 'E-posta veya şifre hatalı.');
+            }).catch(function () {
+              showAuthError('E-posta veya şifre hatalı.');
+            });
+            return response;
+          }
+
+          if (!isOrderCreate || !body || body.paymentMethod !== 'card' || !response.ok) {
+            return response;
+          }
+
+          return response.clone().json().then(function (payload) {
+            if (!payload || !payload.payment || payload.payment.provider !== 'paytr' || !payload.payment.payment_url) {
+              return response;
+            }
+
+            return openPaytrOverlay(payload.payment).then(function (status) {
+              if (status === 'success') {
+                return response;
+              }
+
+              return createJsonResponse({
+                success: false,
+                message: 'Odeme tamamlanmadi veya iptal edildi.'
+              }, 402);
+            });
+          }).catch(function () {
+            return response;
+          });
+        });
+      };
+    })();
+  </script>
+  <script>
+    (function () {
+      var replacements = [
+        ['Ã–ZEL LEGOÂ® SETLERÄ°', 'ÖZEL LEGO® SETLERİ'],
+        ['HAYAL ET, Ä°NÅA ET,', 'HAYAL ET, İNŞA ET,'],
+        ['EFSANEYÄ° YARAT', 'EFSANEYİ YARAT'],
+        ['DÃ¼nyanÄ±n en nadir, en ikonik ve yepyeni parÃ§alarla dolu LEGOÂ® setleri BoomerItems\'ta seni bekliyor. Sadece LEGOÂ® tutkunlarÄ± iÃ§in!', 'Dünyanın en nadir, en ikonik ve yepyeni parçalarla dolu LEGO® setleri BoomerItems\'ta seni bekliyor. Sadece LEGO® tutkunları için!'],
+        ['AlÄ±ÅŸveriÅŸe BaÅŸla', 'Alışverişe Başla'],
+        ['KeÅŸfet', 'Keşfet'],
+        ['GiriÅŸ Yap', 'Giriş Yap'],
+        ['KayÄ±t Ol', 'Kayıt Ol'],
+        ['HesabÄ±n yok mu?', 'Hesabın yok mu?'],
+        ['Koleksiyona KatÄ±l!', 'Koleksiyona Katıl!'],
+        ['Åifre', 'Şifre'],
+        ['SipariÅŸ', 'Sipariş'],
+        ['ÃœrÃ¼n', 'Ürün'],
+        ['Ã–deme', 'Ödeme'],
+        ['Ä°letiÅŸim', 'İletişim'],
+        ['Ä°l', 'İl'],
+        ['Ä°lÃ§e', 'İlçe'],
+        ['Ä°ndirim', 'İndirim'],
+        ['AÃ§Ä±k', 'Açık'],
+        ['Ä°sim', 'İsim'],
+        ['Ä°ptal', 'İptal'],
+        ['Ãœcreti', 'Ücreti'],
+        ['GÃ¼venli', 'Güvenli'],
+        ['GÃ¼vencesiyle', 'Güvencesiyle'],
+        ['Kredi/Banka KartÄ±', 'Kredi/Banka Kartı'],
+        ['Kart Ãœzerindeki Ä°sim', 'Kart Üzerindeki İsim'],
+        ['Ziraat BankasÄ±', 'Ziraat Bankası'],
+        ['BoomerItems DÄ±ÅŸ Tic. Ltd. Åti.', 'BoomerItems Dış Tic. Ltd. Şti.'],
+        ['LÃ¼tfen', 'Lütfen'],
+        ['GeÃ§ersiz', 'Geçersiz'],
+        ['doÄŸrulanamadÄ±', 'doğrulanamadı'],
+        ['Hediye Paketi Ä°stiyorum', 'Hediye Paketi İstiyorum'],
+        ['SÄ°PARÄ°Å', 'SİPARİŞ'],
+        ['Ã‡Ä±kÄ±ÅŸ Yap', 'Çıkış Yap'],
+        ['YÃ¶netim Paneline Git', 'Yönetim Paneline Git'],
+        ['HenÃ¼z bir sipariÅŸin bulunmuyor.', 'Henüz bir siparişin bulunmuyor.'],
+        ['AlÄ±ÅŸveriÅŸ Sepeti', 'Alışveriş Sepeti'],
+        ['Sepetiniz ÅŸu an boÅŸ. Gezinmeye devam edin!', 'Sepetiniz şu an boş. Gezinmeye devam edin!'],
+        ['SatÄ±n Al', 'Satın Al'],
+        ['SipariÅŸiniz BaÅŸarÄ±yla AlÄ±ndÄ±!', 'Siparişiniz Başarıyla Alındı!'],
+        ['AlÄ±ÅŸveriÅŸe Devam Et', 'Alışverişe Devam Et'],
+        ['â‚º', '₺'],
+        ['âœ…', '✅'],
+        ['âŒ', '❌'],
+        ['âš ï¸', '⚠️'],
+        ['ğŸ', '🎁'],
+        ['ğŸ‰', '🎉'],
+        ['ğŸšš', '🚚'],
+        ['ğŸš«', '🚫'],
+        ['ğŸ”’', '🔒']
+      ];
+
+      function normalizeText(value) {
+        var output = value;
+        for (var i = 0; i < replacements.length; i += 1) {
+          output = output.split(replacements[i][0]).join(replacements[i][1]);
+        }
+        return output;
+      }
+
+      function fixNode(node) {
+        if (node.nodeType === Node.TEXT_NODE) {
+          var nextValue = normalizeText(node.nodeValue || '');
+          if (nextValue !== node.nodeValue) {
+            node.nodeValue = nextValue;
+          }
+          return;
+        }
+
+        if (node.nodeType !== Node.ELEMENT_NODE) {
+          return;
+        }
+
+        ['placeholder', 'title', 'aria-label', 'alt', 'value'].forEach(function (attr) {
+          if (!node.hasAttribute(attr)) {
+            return;
+          }
+
+          var current = node.getAttribute(attr) || '';
+          var nextValue = normalizeText(current);
+          if (nextValue !== current) {
+            node.setAttribute(attr, nextValue);
+          }
+        });
+
+        for (var i = 0; i < node.childNodes.length; i += 1) {
+          fixNode(node.childNodes[i]);
+        }
+      }
+
+      function runFix() {
+        if (document.body) {
+          fixNode(document.body);
+
+          // Extra logic for specific button changes
+          var navLinks = document.querySelectorAll('a.nav-link, a, button');
+          navLinks.forEach(function (link) {
+            var text = (link.textContent || '').trim().toUpperCase();
+            if (text === 'BİZ KİMİZ' || text === 'BIZ KIMIZ' || text === 'HAKKIMIZDA') {
+              link.style.display = 'none';
+              if (link.parentElement && link.parentElement.tagName === 'LI') {
+                link.parentElement.style.display = 'none';
+              }
+            }
+            if (text === 'BLOG') {
+              link.textContent = 'Blog';
+            }
+          });
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        runFix();
+        var scheduled = false;
+
+        var observer = new MutationObserver(function () {
+          if (scheduled) {
+            return;
+          }
+
+          scheduled = true;
+          setTimeout(function () {
+            scheduled = false;
+            runFix();
+          }, 50);
+        });
+
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true
+        });
+      });
+    })();
+  </script>
+  <script>
+    (function () {
+      var apiBase = window.location.origin + '/api';
+      var cache = {
+        cities: null,
+        districtsByCity: {}
+      };
+
+      function fetchJson(url) {
+        return fetch(url).then(function (response) {
+          if (!response.ok) {
+            throw new Error('Request failed: ' + response.status);
+          }
+          return response.json();
+        });
+      }
+
+      function ensureNeighborhoodInput(form) {
+        var neighborhoodField = form.querySelector('#checkout-neighborhood');
+        if (!neighborhoodField) {
+          return null;
+        }
+
+        if (neighborhoodField.tagName === 'INPUT') {
+          neighborhoodField.disabled = false;
+          neighborhoodField.required = true;
+          neighborhoodField.placeholder = 'Mahalle giriniz';
+          return neighborhoodField;
+        }
+
+        var input = document.createElement('input');
+        input.type = 'text';
+        input.name = neighborhoodField.name || 'neighborhood';
+        input.id = neighborhoodField.id || 'checkout-neighborhood';
+        input.required = true;
+        input.disabled = false;
+        input.placeholder = 'Mahalle giriniz';
+        input.className = neighborhoodField.className;
+        input.value = neighborhoodField.value || '';
+
+        Array.prototype.forEach.call(neighborhoodField.attributes, function (attribute) {
+          if (['type', 'name', 'id', 'required', 'disabled', 'placeholder', 'value'].indexOf(attribute.name) !== -1) {
+            return;
+          }
+          input.setAttribute(attribute.name, attribute.value);
+        });
+
+        neighborhoodField.parentNode.replaceChild(input, neighborhoodField);
+        return input;
+      }
+
+      function ensureStreetInput(form) {
+        var streetInput = form.querySelector('input[name="street"]');
+        if (!streetInput) {
+          return null;
+        }
+
+        streetInput.disabled = false;
+        streetInput.required = true;
+        streetInput.placeholder = 'Sokak / Cadde giriniz';
+
+        var listId = 'checkout-street-list';
+        streetInput.setAttribute('list', listId);
+
+        var dataList = form.querySelector('#' + listId);
+        if (!dataList) {
+          dataList = document.createElement('datalist');
+          dataList.id = listId;
+          form.appendChild(dataList);
+        }
+
+        return {
+          input: streetInput,
+          list: dataList
+        };
+      }
+
+      function fillStreetList(target, items, placeholder) {
+        var currentValue = target.input.value;
+        target.input.placeholder = placeholder;
+        target.list.innerHTML = '';
+
+        items.forEach(function (item) {
+          var option = document.createElement('option');
+          option.value = item.full_name || item.name;
+          target.list.appendChild(option);
+        });
+        target.input.value = currentValue;
+      }
+
+      function getSelectedOptionId(select) {
+        if (!select) {
+          return null;
+        }
+
+        var option = select.options[select.selectedIndex];
+        if (!option || !option.dataset.id) {
+          return null;
+        }
+
+        return option.dataset.id;
+      }
+
+      function loadCities() {
+        if (cache.cities) {
+          return Promise.resolve(cache.cities);
+        }
+
+        return fetchJson(apiBase + '/shipping/cities').then(function (cities) {
+          cache.cities = Array.isArray(cities) ? cities : [];
+          return cache.cities;
+        });
+      }
+
+      function resolveCityId(citySelect) {
+        var optionId = getSelectedOptionId(citySelect);
+        if (optionId) {
+          return Promise.resolve(Number(optionId));
+        }
+
+        return loadCities().then(function (cities) {
+          var selectedName = citySelect.value;
+          var city = cities.find(function (item) { return item.name === selectedName; });
+          return city ? Number(city.id) : null;
+        });
+      }
+
+      function loadDistricts(cityId) {
+        if (!cityId) {
+          return Promise.resolve([]);
+        }
+
+        if (cache.districtsByCity[cityId]) {
+          return Promise.resolve(cache.districtsByCity[cityId]);
+        }
+
+        return fetchJson(apiBase + '/shipping/districts/' + cityId).then(function (districts) {
+          cache.districtsByCity[cityId] = Array.isArray(districts) ? districts : [];
+          return cache.districtsByCity[cityId];
+        });
+      }
+
+      function resolveDistrictId(citySelect, districtSelect) {
+        var optionId = getSelectedOptionId(districtSelect);
+        if (optionId) {
+          return Promise.resolve(Number(optionId));
+        }
+
+        return resolveCityId(citySelect).then(function (cityId) {
+          return loadDistricts(cityId).then(function (districts) {
+            var district = districts.find(function (item) { return item.name === districtSelect.value; });
+            return district ? Number(district.id) : null;
+          });
+        });
+      }
+
+      function updateManualAddressFields(form) {
+        var districtSelect = form.querySelector('#checkout-district');
+        var neighborhoodInput = ensureNeighborhoodInput(form);
+        var streetTarget = ensureStreetInput(form);
+
+        if (!districtSelect || !neighborhoodInput || !streetTarget) {
+          return;
+        }
+
+        neighborhoodInput.disabled = !districtSelect.value;
+
+
+        if (!districtSelect.value) {
+          neighborhoodInput.value = '';
+          streetTarget.input.value = '';
+          neighborhoodInput.placeholder = 'Once ilce seciniz';
+          fillStreetList(streetTarget, [], 'Once ilce seciniz');
+          return;
+        }
+
+        neighborhoodInput.placeholder = 'Mahalle giriniz';
+        fillStreetList(streetTarget, [], 'Sokak / Cadde giriniz');
+      }
+
+      function syncOptionIds(select, items) {
+        if (!select || !Array.isArray(items)) {
+          return;
+        }
+
+        Array.prototype.forEach.call(select.options, function (option) {
+          var item = items.find(function (entry) { return entry.name === option.value || entry.name === option.textContent; });
+          if (item) {
+            option.dataset.id = String(item.id);
+          }
+        });
+      }
+
+      function wireCheckoutForm(form) {
+        if (!form || form.dataset.locationWired === '1') {
+          return;
+        }
+
+        form.dataset.locationWired = '1';
+
+        var citySelect = form.querySelector('#checkout-city');
+        var districtSelect = form.querySelector('#checkout-district');
+        var neighborhoodInput = ensureNeighborhoodInput(form);
+
+        ensureStreetInput(form);
+
+        if (!citySelect || !districtSelect || !neighborhoodInput) {
+          return;
+        }
+
+        var bootstrapRuns = 0;
+        var bootstrapTimer = setInterval(function () {
+          bootstrapRuns += 1;
+          refreshCityIds();
+          refreshDistrictIds();
+          updateManualAddressFields(form);
+
+          if (bootstrapRuns >= 8 || !document.body.contains(form)) {
+            clearInterval(bootstrapTimer);
+          }
+        }, 400);
+
+        function refreshCityIds() {
+          loadCities().then(function (cities) {
+            syncOptionIds(citySelect, cities);
+          }).catch(function () { });
+        }
+
+        function refreshDistrictIds() {
+          resolveCityId(citySelect).then(function (cityId) {
+            return loadDistricts(cityId);
+          }).then(function (districts) {
+            syncOptionIds(districtSelect, districts);
+          }).catch(function () { });
+        }
+
+        refreshCityIds();
+        updateManualAddressFields(form);
+
+        citySelect.addEventListener('change', function () {
+          setTimeout(function () {
+            refreshDistrictIds();
+            updateManualAddressFields(form);
+          }, 0);
+        });
+
+        districtSelect.addEventListener('change', function () {
+          setTimeout(function () {
+            updateManualAddressFields(form);
+          }, 0);
+        });
+
+        citySelect.addEventListener('focus', refreshCityIds);
+        districtSelect.addEventListener('focus', refreshDistrictIds);
+      }
+
+      function boot() {
+        var form = document.getElementById('checkout-form');
+        if (form) {
+          wireCheckoutForm(form);
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        boot();
+        var scheduled = false;
+
+        var observer = new MutationObserver(function () {
+          if (scheduled) {
+            return;
+          }
+
+          scheduled = true;
+          setTimeout(function () {
+            scheduled = false;
+            boot();
+          }, 50);
+        });
+
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true
+        });
+      });
+    })();
+  </script>
+  <script>
+    (function () {
+      var apiBase = window.location.origin + '/api';
+
+      function parseCartItems() {
+        try {
+          var raw = localStorage.getItem('cartItems');
+          var items = raw ? JSON.parse(raw) : [];
+          return Array.isArray(items) ? items : [];
+        } catch (error) {
+          return [];
+        }
+      }
+
+      function getVisibleStepContents(form) {
+        return form ? form.querySelectorAll('.step-content') : [];
+      }
+
+      function getCheckoutRoot(form) {
+        return form ? (form.closest('.checkout-body') || form.closest('.checkout-modal-container') || document) : document;
+      }
+
+      function setStep(form, step) {
+        var contents = getVisibleStepContents(form);
+        var root = getCheckoutRoot(form);
+        var steps = root.querySelectorAll('.checkout-steps .step');
+        var lines = root.querySelectorAll('.checkout-steps .step-line');
+        var confirmButton = root.querySelector('.confirm-order-btn');
+        var backButton = root.querySelector('.back-btn');
+
+        Array.prototype.forEach.call(contents, function (content, index) {
+          content.style.display = index === (step - 1) ? 'block' : 'none';
+        });
+
+        Array.prototype.forEach.call(steps, function (node, index) {
+          node.classList.toggle('active', index < step);
+        });
+
+        Array.prototype.forEach.call(lines, function (node, index) {
+          node.classList.toggle('active', step > index + 1);
+        });
+
+        if (confirmButton) {
+          confirmButton.textContent = step === 1 ? 'Ödeme Adımına Geç' : 'Siparişi Onayla';
+        }
+
+        if (backButton) {
+          backButton.style.display = step === 2 ? '' : 'none';
+        }
+
+        form.dataset.manualStep = String(step);
+      }
+
+      function validateStep(container) {
+        if (!container) {
+          return false;
+        }
+
+        var fields = container.querySelectorAll('input, select, textarea');
+        for (var i = 0; i < fields.length; i += 1) {
+          var field = fields[i];
+          if (field.disabled || !field.willValidate) {
+            continue;
+          }
+          if (!field.reportValidity()) {
+            return false;
+          }
+        }
+        return true;
+      }
+
+      function ensureBackButton(form) {
+        var actions = getCheckoutRoot(form).querySelector('.checkout-actions');
+        if (!actions) {
+          return null;
+        }
+
+        var button = actions.querySelector('.back-btn');
+        if (!button) {
+          button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'btn-outline back-btn';
+          button.textContent = 'Geri';
+          button.style.display = 'none';
+          actions.insertBefore(button, actions.firstChild || null);
+        }
+
+        if (button.dataset.manualBound !== '1') {
+          button.dataset.manualBound = '1';
+          button.addEventListener('click', function () {
+            setStep(form, 1);
+          });
+        }
+
+        return button;
+      }
+
+      function getSelectedPaymentMethod(form) {
+        var checked = form.querySelector('input[name="payment"]:checked');
+        return checked ? checked.value : 'card';
+      }
+
+      function closeCheckoutSurfaces() {
+        Array.prototype.forEach.call(document.querySelectorAll('.checkout-modal-backdrop, .checkout-modal-container'), function (node) {
+          node.remove();
+        });
+        document.body.style.overflow = '';
+      }
+
+      function createSuccessOverlay(orderId, message) {
+        var existing = document.getElementById('manual-order-success');
+        if (existing) {
+          existing.remove();
+        }
+        closeCheckoutSurfaces();
+
+        var overlay = document.createElement('div');
+        overlay.id = 'manual-order-success';
+        overlay.style.position = 'fixed';
+        overlay.style.inset = '0';
+        overlay.style.background = 'rgba(15,23,42,0.72)';
+        overlay.style.zIndex = '1000001';
+        overlay.style.display = 'grid';
+        overlay.style.placeItems = 'center';
+
+        var card = document.createElement('div');
+        card.style.width = 'min(92vw, 520px)';
+        card.style.background = '#ffffff';
+        card.style.borderRadius = '20px';
+        card.style.padding = '32px';
+        card.style.textAlign = 'center';
+        card.style.boxShadow = '0 24px 60px rgba(15,23,42,0.3)';
+
+        card.innerHTML =
+          '<img src="/logo_full.png" alt="BoomerItems" style="max-width:220px;width:100%;height:auto;margin-bottom:18px;">' +
+          '<h3 style="margin:0 0 12px;color:#0f172a;">Siparişiniz Alındı</h3>' +
+          '<p style="margin:0 0 12px;color:#475569;">' + (message || 'Siparişiniz BoomerItems tarafından alınmıştır.') + '</p>' +
+          '<p style="margin:0 0 24px;font-weight:700;color:#dd101f;">Sipariş No: ' + (orderId || '-') + '</p>' +
+          '<button type="button" style="border:0;border-radius:12px;padding:14px 20px;background:#dd101f;color:#fff;font-weight:700;cursor:pointer;">Tamam</button>';
+
+        card.querySelector('button').addEventListener('click', function () {
+          overlay.remove();
+          localStorage.removeItem('cartItems');
+          window.location.reload();
+        });
+
+        overlay.appendChild(card);
+        document.body.appendChild(overlay);
+      }
+
+      function openPaymentOverlay(payment, orderId) {
+        if (!payment || !payment.payment_url) {
+          createSuccessOverlay(orderId, 'Ödeme bağlantısı oluşturulamadı. Siparişiniz yine de alındı.');
+          return;
+        }
+
+        var overlay = document.createElement('div');
+        overlay.style.position = 'fixed';
+        overlay.style.inset = '0';
+        overlay.style.background = 'rgba(15,23,42,0.76)';
+        overlay.style.zIndex = '1000001';
+        overlay.style.display = 'grid';
+        overlay.style.placeItems = 'center';
+
+        var frameWrap = document.createElement('div');
+        frameWrap.style.width = 'min(96vw, 980px)';
+        frameWrap.style.height = 'min(92vh, 760px)';
+        frameWrap.style.background = '#fff';
+        frameWrap.style.borderRadius = '18px';
+        frameWrap.style.overflow = 'hidden';
+        frameWrap.style.position = 'relative';
+
+        var close = document.createElement('button');
+        close.type = 'button';
+        close.textContent = 'Kapat';
+        close.style.position = 'absolute';
+        close.style.top = '14px';
+        close.style.right = '14px';
+        close.style.zIndex = '2';
+        close.style.border = '0';
+        close.style.borderRadius = '10px';
+        close.style.padding = '10px 14px';
+        close.style.cursor = 'pointer';
+
+        var iframe = document.createElement('iframe');
+        iframe.src = payment.payment_url;
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.border = '0';
+
+        function cleanup() {
+          window.removeEventListener('message', onMessage);
+          overlay.remove();
+        }
+
+        function onMessage(event) {
+          var data = event.data || {};
+          if (data.source !== 'boomeritems-paytr' || data.orderId !== orderId) {
+            return;
+          }
+          cleanup();
+          if (data.status === 'success') {
+            createSuccessOverlay(orderId, 'Ödemeniz alındı ve siparişiniz işleme alındı.');
+          } else {
+            createSuccessOverlay(orderId, 'Ödeme başarısız görünüyor. Sipariş kaydınız oluşturuldu.');
+          }
+        }
+
+        close.addEventListener('click', function () {
+          cleanup();
+          createSuccessOverlay(orderId, 'Ödeme penceresi kapatıldı. Sipariş kaydınız oluşturuldu.');
+        });
+
+        window.addEventListener('message', onMessage);
+        frameWrap.appendChild(close);
+        frameWrap.appendChild(iframe);
+        overlay.appendChild(frameWrap);
+        document.body.appendChild(overlay);
+      }
+
+      function buildOrderPayload(form) {
+        var cartItems = parseCartItems();
+        if (!cartItems.length) {
+          throw new Error('Sepetiniz bos.');
+        }
+
+        var stockState = window.__boomerStockState || { byId: {}, byName: {} };
+        var adjustedItems = [];
+        var changedItems = [];
+        function normalizeStockKey(value) {
+          return String(value || '')
+            .toLocaleLowerCase('tr-TR')
+            .replace(/\s+/g, ' ')
+            .trim();
+        }
+
+        cartItems.forEach(function (item) {
+          var requestedQty = Number(item.qty || item.quantity || 1);
+          var stockInfo = stockState.byId[String(item.id || '')] || stockState.byName[normalizeStockKey(item.title || item.name || '')] || null;
+          var availableQty = stockInfo ? Number(stockInfo.stock || 0) : null;
+          var finalQty = requestedQty;
+
+          if (availableQty !== null) {
+            if (availableQty <= 0) {
+              finalQty = 0;
+            } else if (requestedQty > availableQty) {
+              finalQty = availableQty;
+            }
+          }
+
+          if (finalQty !== requestedQty) {
+            changedItems.push({
+              title: item.title || 'Urun',
+              requested: requestedQty,
+              finalQty: finalQty,
+              available: availableQty
+            });
+          }
+
+          if (finalQty > 0) {
+            adjustedItems.push(Object.assign({}, item, {
+              qty: finalQty,
+              quantity: finalQty
+            }));
+          }
+        });
+
+        if (changedItems.length) {
+          localStorage.setItem('cartItems', JSON.stringify(adjustedItems));
+          var firstChange = changedItems[0];
+          if (firstChange.finalQty <= 0) {
+            throw new Error("'" + firstChange.title + "' stokta kalmadi. Urun sepetinizden kaldirildi.");
+          }
+          throw new Error("'" + firstChange.title + "' icin stokta " + firstChange.available + " adet var. Sepet adedi buna gore guncellendi.");
+        }
+
+        var couponInput = document.querySelector('.summary-coupon input[type="text"]');
+        var shippingAddress = {
+          fullname: (form.querySelector('input[name="fullname"]') || {}).value || '',
+          phone: (form.querySelector('input[name="phone"]') || {}).value || '',
+          email: (form.querySelector('input[name="email"]') || {}).value || '',
+          city: (form.querySelector('#checkout-city') || {}).value || '',
+          district: (form.querySelector('#checkout-district') || {}).value || '',
+          neighborhood: (form.querySelector('#checkout-neighborhood') || {}).value || '',
+          street: (form.querySelector('input[name="street"]') || {}).value || '',
+          address_detail: (form.querySelector('textarea[name="address_detail"]') || {}).value || ''
+        };
+
+        return {
+          shippingAddress: shippingAddress,
+          order_note: (form.querySelector('textarea[name="order_note"]') || {}).value || '',
+          payment_method: getSelectedPaymentMethod(form),
+          coupon_code: couponInput ? couponInput.value : '',
+          gift_wrap: !!(form.querySelector('.checkbox-label input[type="checkbox"]') || {}).checked,
+          items: adjustedItems.map(function (item) {
+            return {
+              id: item.id,
+              qty: item.qty || item.quantity || 1,
+              desi: item.desi || 1,
+              title: item.title || '',
+              price: item.price || 0,
+              img: item.img || ''
+            };
+          })
+        };
+      }
+
+      function submitOrder(form, button) {
+        if (button.dataset.loading === '1') {
+          return;
+        }
+
+        var payload = buildOrderPayload(form);
+        button.dataset.loading = '1';
+        button.disabled = true;
+        var originalText = button.textContent;
+        button.textContent = 'Sipariş Gönderiliyor...';
+
+        fetch(apiBase + '/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+          .then(function (response) {
+            return response.json().then(function (data) {
+              if (!response.ok) {
+                throw new Error(data.message || 'Sipariş oluşturulamadı.');
+              }
+              return data;
+            });
+          })
+          .then(function (data) {
+            if (payload.payment_method === 'card') {
+              openPaymentOverlay(data.payment || null, data.id);
+              return;
+            }
+            createSuccessOverlay(data.id, 'Siparişiniz alındı. Bilgilendirme e-postası gönderildi.');
+          })
+          .catch(function (error) {
+            alert(error.message || 'Sipariş sırasında hata oluştu.');
+          })
+          .finally(function () {
+            button.dataset.loading = '0';
+            button.disabled = false;
+            button.textContent = originalText;
+          });
+      }
+
+      function wireManualCheckout(form) {
+        if (!form || form.dataset.manualCheckoutWired === '1') {
+          return;
+        }
+
+        var confirmButton = getCheckoutRoot(form).querySelector('.confirm-order-btn');
+        if (!confirmButton) {
+          return;
+        }
+
+        form.dataset.manualCheckoutWired = '1';
+        ensureBackButton(form);
+        setStep(form, 1);
+
+        confirmButton.addEventListener('click', function (event) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+
+          var step = Number(form.dataset.manualStep || '1');
+          if (step === 1) {
+            var firstStep = getVisibleStepContents(form)[0];
+            if (!validateStep(firstStep)) {
+              return;
+            }
+            setStep(form, 2);
+            return;
+          }
+
+          var secondStep = getVisibleStepContents(form)[1];
+          if (!validateStep(secondStep)) {
+            return;
+          }
+
+          submitOrder(form, confirmButton);
+        }, true);
+      }
+
+      function boot() {
+        var form = document.getElementById('checkout-form');
+        if (form) {
+          wireManualCheckout(form);
+          if (form.dataset.manualCheckoutBootstrap !== '1') {
+            form.dataset.manualCheckoutBootstrap = '1';
+            var attempts = 0;
+            var timer = setInterval(function () {
+              attempts += 1;
+              wireManualCheckout(form);
+              if (form.dataset.manualCheckoutWired === '1' || attempts >= 12 || !document.body.contains(form)) {
+                clearInterval(timer);
+              }
+            }, 300);
+          }
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        boot();
+        var scheduled = false;
+        var observer = new MutationObserver(function () {
+          if (scheduled) {
+            return;
+          }
+          scheduled = true;
+          setTimeout(function () {
+            scheduled = false;
+            boot();
+          }, 50);
+        });
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true
+        });
+      });
+    })();
+  </script>
+  <script>
+    (function () {
+      var apiBase = window.location.origin + '/api';
+      var stockByName = {};
+      var stockById = {};
+
+      function normalize(value) {
+        return String(value || '')
+          .toLocaleLowerCase('tr-TR')
+          .replace(/\s+/g, ' ')
+          .trim();
+      }
+
+      function stockText(stockInfo) {
+        if (!stockInfo || !stockInfo.isActive || stockInfo.stock <= 0 || !stockInfo.inStock) {
+          return 'Stokta yok';
+        }
+        return 'Stokta ' + stockInfo.stock + ' adet';
+      }
+
+      function stockClass(stockInfo) {
+        if (!stockInfo || !stockInfo.isActive || stockInfo.stock <= 0 || !stockInfo.inStock) {
+          return 'stock-inline-note out';
+        }
+        if (stockInfo.stock <= 3) {
+          return 'stock-inline-note low';
+        }
+        return 'stock-inline-note';
+      }
+
+      function loadStockMap() {
+        return fetch(apiBase + '/products?limit=250').then(function (response) {
+          if (!response.ok) {
+            throw new Error('products load failed');
+          }
+          return response.json();
+        }).then(function (products) {
+          var list = Array.isArray(products) ? products : [];
+          stockByName = {};
+          stockById = {};
+          list.forEach(function (product) {
+            var mapped = {
+              stock: Number(product.stock || 0),
+              inStock: !!product.in_stock,
+              isActive: product.isActive !== false && product.is_active !== 0
+            };
+            stockByName[normalize(product.name || product.title)] = mapped;
+            stockById[String(product.id || '')] = mapped;
+          });
+          window.__boomerStockState = {
+            byName: stockByName,
+            byId: stockById
+          };
+          syncStoredCart();
+          decorateCards();
+          decorateCartAndSummary();
+        }).catch(function () { });
+      }
+
+      function findCardTitle(card) {
+        var titleNode = card.querySelector('h1, h2, h3, h4, h5, [data-product-title], .product-title');
+        return titleNode ? normalize(titleNode.textContent) : '';
+      }
+
+      function ensureBadge(card) {
+        var badge = card.querySelector('.stock-badge-out');
+        if (badge) {
+          return badge;
+        }
+
+        badge = document.createElement('div');
+        badge.className = 'stock-badge-out';
+        badge.textContent = 'Tukendi';
+        badge.style.position = 'absolute';
+        badge.style.top = '12px';
+        badge.style.left = '12px';
+        card.appendChild(badge);
+        return badge;
+      }
+
+      function ensureInlineNote(container, stockInfo) {
+        if (!container) {
+          return;
+        }
+        var note = container.querySelector('.stock-inline-note');
+        if (!note) {
+          note = document.createElement('div');
+          note.className = 'stock-inline-note';
+          container.appendChild(note);
+        }
+        note.className = stockClass(stockInfo);
+        note.textContent = stockText(stockInfo);
+      }
+
+      function lookupStockInfo(id, title) {
+        return stockById[String(id || '')] || stockByName[normalize(title)] || null;
+      }
+
+      function syncStoredCart() {
+        var raw;
+        try {
+          raw = JSON.parse(localStorage.getItem('cartItems') || '[]');
+        } catch (error) {
+          raw = [];
+        }
+        if (!Array.isArray(raw) || !raw.length) {
+          return;
+        }
+
+        var changed = false;
+        var filtered = raw.map(function (item) {
+          var stockInfo = lookupStockInfo(item.id, item.title || item.name || '');
+          if (!stockInfo) {
+            return item;
+          }
+
+          var availableQty = Math.max(0, Number(stockInfo.stock || 0));
+          var currentQty = Math.max(1, Number(item.qty || item.quantity || 1));
+          var nextQty = Math.min(currentQty, availableQty || currentQty);
+
+          if (!stockInfo.isActive || !stockInfo.inStock || availableQty <= 0) {
+            changed = true;
+            return null;
+          }
+
+          if (nextQty !== currentQty) {
+            changed = true;
+            return Object.assign({}, item, {
+              qty: nextQty,
+              quantity: nextQty
+            });
+          }
+
+          return item;
+        }).filter(Boolean);
+
+        if (changed) {
+          localStorage.setItem('cartItems', JSON.stringify(filtered));
+        }
+      }
+
+      function decorateCards() {
+        var cards = document.querySelectorAll('article, .product-card, .card, .product-item');
+        Array.prototype.forEach.call(cards, function (card) {
+          var name = findCardTitle(card);
+          if (!name || !stockByName[name]) {
+            return;
+          }
+
+          var stockInfo = stockByName[name];
+          var isOut = !stockInfo.isActive || !stockInfo.inStock || stockInfo.stock <= 0;
+          var button = Array.prototype.find.call(
+            card.querySelectorAll('button, a'),
+            function (node) {
+              var text = normalize(node.textContent);
+              return text.indexOf('sepete') !== -1 || text.indexOf('satın al') !== -1 || text.indexOf('satin al') !== -1;
+            }
+          );
+
+          if (!isOut) {
+            var infoContainer = card.querySelector('.product-info, .admin-product-cell, .summary-item-info') || card;
+            ensureInlineNote(infoContainer, stockInfo);
+            return;
+          }
+
+          card.classList.add('stock-card-out');
+          ensureBadge(card);
+          ensureInlineNote(card.querySelector('.product-info, .admin-product-cell, .summary-item-info') || card, stockInfo);
+
+          if (button) {
+            button.classList.add('stock-disabled-btn');
+            if (button.tagName === 'BUTTON') {
+              button.disabled = true;
+            }
+            button.textContent = 'Tukendi';
+          }
+        });
+      }
+
+      function getCartQuantityForTitle(title) {
+        var raw;
+        try {
+          raw = JSON.parse(localStorage.getItem('cartItems') || '[]');
+        } catch (error) {
+          raw = [];
+        }
+
+        if (!Array.isArray(raw)) {
+          return 0;
+        }
+
+        var normalizedTitle = normalize(title);
+        return raw.reduce(function (sum, item) {
+          if (normalize(item.title || item.name || '') !== normalizedTitle) {
+            return sum;
+          }
+          return sum + Math.max(0, Number(item.qty || item.quantity || 0));
+        }, 0);
+      }
+
+      function preventOverAdd(event) {
+        var button = event.target.closest('button, a');
+        if (!button) {
+          return;
+        }
+
+        var text = normalize(button.textContent);
+        if (text.indexOf('sepete ekle') === -1) {
+          return;
+        }
+
+        var card = button.closest('article, .product-card, .card, .product-item');
+        if (!card) {
+          return;
+        }
+
+        var titleNode = card.querySelector('h1, h2, h3, h4, h5, [data-product-title], .product-title');
+        var title = titleNode ? titleNode.textContent : '';
+        var stockInfo = lookupStockInfo('', title);
+        if (!stockInfo) {
+          return;
+        }
+
+        var cartQty = getCartQuantityForTitle(title);
+        if (!stockInfo.isActive || !stockInfo.inStock || stockInfo.stock <= 0) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          alert('Bu urun stokta yok.');
+          return;
+        }
+
+        if (cartQty >= stockInfo.stock) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          alert("Bu urunden en fazla " + stockInfo.stock + " adet ekleyebilirsiniz.");
+        }
+      }
+
+      function decorateCartAndSummary() {
+        var items = document.querySelectorAll('.cart-item, .summary-item');
+        Array.prototype.forEach.call(items, function (itemNode) {
+          var titleNode = itemNode.querySelector('h1, h2, h3, h4, h5, .summary-item-title');
+          var title = titleNode ? titleNode.textContent : '';
+          var stockInfo = lookupStockInfo('', title);
+          if (!stockInfo) {
+            return;
+          }
+          var infoContainer = itemNode.querySelector('.cart-item-info, .summary-item-info') || itemNode;
+          ensureInlineNote(infoContainer, stockInfo);
+        });
+      }
+
+      function updateStoredCartQuantity(title, nextQty) {
+        var raw;
+        try {
+          raw = JSON.parse(localStorage.getItem('cartItems') || '[]');
+        } catch (error) {
+          raw = [];
+        }
+
+        if (!Array.isArray(raw) || !raw.length) {
+          return;
+        }
+
+        var normalizedTitle = normalize(title);
+        var updated = raw.map(function (item) {
+          if (normalize(item.title || item.name || '') !== normalizedTitle) {
+            return item;
+          }
+          return Object.assign({}, item, {
+            qty: nextQty,
+            quantity: nextQty
+          });
+        }).filter(function (item) {
+          return Number(item.qty || item.quantity || 0) > 0;
+        });
+
+        localStorage.setItem('cartItems', JSON.stringify(updated));
+      }
+
+      function ensureCartQuantityControls() {
+        var cartItems = document.querySelectorAll('.cart-item');
+        Array.prototype.forEach.call(cartItems, function (itemNode) {
+          var infoContainer = itemNode.querySelector('.cart-item-info');
+          var titleNode = itemNode.querySelector('h1, h2, h3, h4, h5');
+          var qtyTextNode = Array.prototype.find.call(infoContainer ? infoContainer.querySelectorAll('span, p, div') : [], function (node) {
+            return normalize(node.textContent).indexOf('adet:') === 0;
+          });
+
+          if (!infoContainer || !titleNode || !qtyTextNode) {
+            return;
+          }
+
+          var stockInfo = lookupStockInfo('', titleNode.textContent);
+          if (!stockInfo || !stockInfo.isActive || stockInfo.stock <= 0) {
+            return;
+          }
+
+          var match = String(qtyTextNode.textContent || '').match(/(\d+)/);
+          var currentQty = match ? Number(match[1]) : 1;
+          var maxQty = Math.max(1, Number(stockInfo.stock || 1));
+          var controls = infoContainer.querySelector('.cart-qty-controls');
+
+          qtyTextNode.textContent = 'Adet: ' + currentQty;
+
+          if (!controls) {
+            controls = document.createElement('div');
+            controls.className = 'cart-qty-controls';
+            controls.innerHTML =
+              '<button type="button" class="cart-qty-btn cart-qty-minus">-</button>' +
+              '<span class="cart-qty-value"></span>' +
+              '<button type="button" class="cart-qty-btn cart-qty-plus">+</button>';
+            qtyTextNode.insertAdjacentElement('afterend', controls);
+          }
+
+          var minus = controls.querySelector('.cart-qty-minus');
+          var plus = controls.querySelector('.cart-qty-plus');
+          var value = controls.querySelector('.cart-qty-value');
+
+          value.textContent = String(currentQty);
+          minus.disabled = currentQty <= 1;
+          plus.disabled = currentQty >= maxQty;
+
+          if (controls.dataset.bound !== '1') {
+            controls.dataset.bound = '1';
+
+            controls.addEventListener('click', function (event) {
+              var button = event.target.closest('.cart-qty-btn');
+              if (!button) {
+                return;
+              }
+
+              var latestMatch = String(qtyTextNode.textContent || '').match(/(\d+)/);
+              var latestQty = latestMatch ? Number(latestMatch[1]) : 1;
+              var nextQty = button.classList.contains('cart-qty-plus') ? latestQty + 1 : latestQty - 1;
+              nextQty = Math.max(1, Math.min(maxQty, nextQty));
+
+              if (nextQty === latestQty) {
+                return;
+              }
+
+              qtyTextNode.textContent = 'Adet: ' + nextQty;
+              value.textContent = String(nextQty);
+              minus.disabled = nextQty <= 1;
+              plus.disabled = nextQty >= maxQty;
+              updateStoredCartQuantity(titleNode.textContent, nextQty);
+
+              var priceNode = itemNode.querySelector('.cart-item-info p');
+              var priceText = priceNode ? priceNode.textContent : '';
+              var numericPrice = Number(String(priceText).replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(',', '.'));
+              if (!isNaN(numericPrice) && numericPrice > 0) {
+                var totals = document.querySelectorAll('.cart-total span:last-child');
+                Array.prototype.forEach.call(totals, function (totalNode) {
+                  var raw;
+                  try {
+                    raw = JSON.parse(localStorage.getItem('cartItems') || '[]');
+                  } catch (error) {
+                    raw = [];
+                  }
+                  var total = (Array.isArray(raw) ? raw : []).reduce(function (sum, item) {
+                    var qty = Number(item.qty || item.quantity || 1);
+                    var price = Number(item.price || 0);
+                    return sum + (qty * price);
+                  }, 0);
+                  totalNode.textContent = total.toLocaleString('tr-TR') + ' ₺';
+                });
+              }
+            });
+          }
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        loadStockMap();
+        document.addEventListener('click', preventOverAdd, true);
+
+        var scheduled = false;
+        var observer = new MutationObserver(function () {
+          if (scheduled) {
+            return;
+          }
+          scheduled = true;
+          setTimeout(function () {
+            scheduled = false;
+            decorateCards();
+            decorateCartAndSummary();
+            ensureCartQuantityControls();
+          }, 80);
+        });
+
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true
+        });
+      });
+    })();
+  </script>
+  <script>
+    (function () {
+      function findMenuToggle(header) {
+        return header.querySelector('.mobile-only button, .mobile-only [role="button"], button.mobile-only, .mobile-only');
+      }
+
+      function closeMenu(header) {
+        header.classList.remove('mobile-nav-open');
+        var toggle = findMenuToggle(header);
+        if (toggle) {
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      }
+
+      function bindMobileHeader(header) {
+        if (!header || header.dataset.mobileMenuBound === '1') {
+          return;
+        }
+
+        var nav = header.querySelector('.nav-menu');
+        var toggle = findMenuToggle(header);
+        if (!nav || !toggle) {
+          return;
+        }
+
+        header.dataset.mobileMenuBound = '1';
+        toggle.classList.add('mobile-menu-toggle');
+        toggle.setAttribute('aria-label', 'Menuyu ac');
+        toggle.setAttribute('aria-expanded', 'false');
+
+        toggle.addEventListener('click', function (event) {
+          if (window.innerWidth > 768) {
+            return;
+          }
+
+          event.preventDefault();
+          event.stopPropagation();
+
+          var willOpen = !header.classList.contains('mobile-nav-open');
+          header.classList.toggle('mobile-nav-open', willOpen);
+          toggle.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+        });
+
+        nav.addEventListener('click', function (event) {
+          var link = event.target.closest('a, button');
+          if (link && window.innerWidth <= 768) {
+            closeMenu(header);
+          }
+        });
+      }
+
+      function bindAllHeaders() {
+        Array.prototype.forEach.call(document.querySelectorAll('.modern-header'), bindMobileHeader);
+      }
+
+      document.addEventListener('click', function (event) {
+        if (window.innerWidth > 768) {
+          return;
+        }
+
+        Array.prototype.forEach.call(document.querySelectorAll('.modern-header.mobile-nav-open'), function (header) {
+          if (!header.contains(event.target)) {
+            closeMenu(header);
+          }
+        });
+      });
+
+      window.addEventListener('resize', function () {
+        if (window.innerWidth > 768) {
+          Array.prototype.forEach.call(document.querySelectorAll('.modern-header.mobile-nav-open'), closeMenu);
+        }
+      });
+
+      document.addEventListener('DOMContentLoaded', function () {
+        bindAllHeaders();
+
+        var observer = new MutationObserver(function () {
+          bindAllHeaders();
+        });
+
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true
+        });
+      });
+    })();
+  </script>
+  <script>
+    (function () {
+      function normalize(value) {
+        return String(value || '')
+          .toLocaleLowerCase('tr-TR')
+          .replace(/\s+/g, ' ')
+          .trim();
+      }
+
+      function getCardLabel(card) {
+        var titleNode = card.querySelector('h1, h2, h3, h4, h5');
+        return titleNode ? normalize(titleNode.textContent) : '';
+      }
+
+      function findProductsSection() {
+        return document.querySelector('.products-section, #products, [data-products-section]');
+      }
+
+      function findMatchingFilter(label) {
+        if (!label) {
+          return null;
+        }
+
+        var aliases = {
+          'star wars': ['star wars', 'starwars'],
+          'lego icons': ['lego icons', 'icons'],
+          'technic': ['technic']
+        };
+
+        var normalizedAliases = aliases[label] || [label];
+        var buttons = document.querySelectorAll('.filter-btn, [data-category], [data-filter]');
+        return Array.prototype.find.call(buttons, function (button) {
+          var text = normalize(
+            button.getAttribute('data-category') ||
+            button.getAttribute('data-filter') ||
+            button.textContent
+          );
+
+          return text && normalizedAliases.some(function (alias) {
+            return text.indexOf(alias) !== -1 || alias.indexOf(text) !== -1;
+          });
+        }) || null;
+      }
+
+      function handleCategoryJump(card, event) {
+        if (event) {
+          event.preventDefault();
+        }
+
+        var label = getCardLabel(card);
+        var productsSection = findProductsSection();
+        var filterButton = findMatchingFilter(label);
+
+        if (filterButton) {
+          filterButton.click();
+        }
+
+        if (productsSection) {
+          productsSection.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      }
+
+      function bindCategoryCards() {
+        var cards = document.querySelectorAll('.category-block');
+        Array.prototype.forEach.call(cards, function (card) {
+          if (card.dataset.jumpBound === '1') {
+            return;
+          }
+
+          card.dataset.jumpBound = '1';
+          card.style.cursor = 'pointer';
+
+          card.addEventListener('click', function (event) {
+            handleCategoryJump(card, event);
+          });
+
+          card.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+              handleCategoryJump(card, event);
+            }
+          });
+
+          if (!card.hasAttribute('tabindex')) {
+            card.setAttribute('tabindex', '0');
+          }
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        bindCategoryCards();
+
+        var observer = new MutationObserver(function () {
+          bindCategoryCards();
+        });
+
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true
+        });
+      });
+    })();
+  </script>
+  <style>
+    .admin-desi-summary {
+      margin-top: 12px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(255, 204, 0, 0.16), rgba(255, 255, 255, 0.96));
+      border: 1px solid rgba(255, 204, 0, 0.45);
+      color: #0f172a;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    .admin-desi-summary-title {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #92400e;
+      margin-bottom: 8px;
+    }
+
+    .admin-desi-summary-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .admin-desi-summary-row:last-child {
+      margin-bottom: 0;
+      padding-top: 8px;
+      border-top: 1px dashed rgba(15, 23, 42, 0.16);
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .admin-desi-summary-muted {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
+    .maintenance-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(15, 23, 42, 0.72);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 1000000;
+    }
+
+    .maintenance-modal-backdrop.open {
+      display: flex;
+    }
+
+    .maintenance-modal {
+      width: min(100%, 420px);
+      padding: 28px 24px;
+      border-radius: 24px;
+      background: #ffffff;
+      color: #0f172a;
+      text-align: center;
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.28);
+      border: 1px solid rgba(255, 204, 0, 0.4);
+    }
+
+    .maintenance-lock {
+      width: 68px;
+      height: 68px;
+      margin: 0 auto 16px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #ffcc00, #f59e0b);
+      color: #111827;
+      font-size: 34px;
+      font-weight: 800;
+      box-shadow: 0 12px 24px rgba(245, 158, 11, 0.28);
+    }
+
+    .maintenance-modal h3 {
+      margin: 0 0 10px;
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .maintenance-modal p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #475569;
+    }
+
+    .maintenance-close {
+      margin-top: 20px;
+      min-width: 140px;
+    }
+
+    @media (max-width: 768px) {
+
+      .checkout-modal-container,
+      .checkout-modal-container.wide {
+        width: calc(100vw - 16px) !important;
+        max-width: calc(100vw - 16px) !important;
+        height: calc(100svh - 16px) !important;
+        max-height: calc(100svh - 16px) !important;
+        margin: 8px !important;
+        border-radius: 22px !important;
+      }
+
+      .checkout-header {
+        padding: 16px 18px !important;
+      }
+
+      .checkout-header h3 {
+        font-size: 1.05rem !important;
+        line-height: 1.2 !important;
+      }
+
+      .checkout-form-section,
+      .checkout-summary-section {
+        padding: 16px !important;
+      }
+
+      .checkout-steps {
+        gap: 6px !important;
+        margin-bottom: 18px !important;
+      }
+
+      .step {
+        min-width: 0 !important;
+        font-size: 0.8rem !important;
+        gap: 6px !important;
+      }
+
+      .step span {
+        width: 30px !important;
+        height: 30px !important;
+        font-size: 0.82rem !important;
+      }
+
+      .step-line {
+        margin: 0 4px !important;
+      }
+
+      .step-title,
+      .summary-title {
+        font-size: 1.05rem !important;
+        margin-bottom: 14px !important;
+        letter-spacing: 0 !important;
+      }
+
+      .form-group,
+      .form-row {
+        margin-bottom: 10px !important;
+      }
+
+      .form-group input,
+      .form-group select,
+      .form-group textarea,
+      .form-row input,
+      .form-row select,
+      .form-row textarea {
+        min-height: 50px !important;
+        border-radius: 14px !important;
+        padding: 12px 14px !important;
+        font-size: 0.95rem !important;
+      }
+
+      .summary-items {
+        gap: 12px !important;
+        margin-bottom: 18px !important;
+      }
+
+      .summary-item {
+        display: grid !important;
+        grid-template-columns: 56px minmax(0, 1fr) auto !important;
+        gap: 10px !important;
+        align-items: center !important;
+      }
+
+      .summary-item img {
+        width: 56px !important;
+        height: 56px !important;
+      }
+
+      .summary-item-info {
+        min-width: 0 !important;
+      }
+
+      .summary-item-title {
+        font-size: 0.84rem !important;
+        line-height: 1.3 !important;
+      }
+
+      .summary-item-price {
+        font-size: 0.92rem !important;
+        white-space: nowrap !important;
+      }
+
+      .summary-coupon {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+        margin-bottom: 18px !important;
+      }
+
+      .summary-coupon input,
+      .summary-coupon button {
+        width: 100% !important;
+        min-height: 50px !important;
+        border-radius: 14px !important;
+      }
+
+      .summary-row {
+        font-size: 0.95rem !important;
+        margin-bottom: 10px !important;
+      }
+
+      .summary-row.total {
+        font-size: 1.08rem !important;
+      }
+
+      .checkout-actions {
+        position: sticky !important;
+        bottom: 0 !important;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+        padding-top: 12px !important;
+        background: linear-gradient(180deg, rgba(248, 248, 248, 0), #f8f8f8 24px) !important;
+      }
+
+      .checkout-actions button,
+      .confirm-order-btn,
+      .checkout-actions .back-btn {
+        width: 100% !important;
+        min-height: 54px !important;
+        border-radius: 16px !important;
+        font-size: 1rem !important;
+      }
+
+      .secure-checkout-badge {
+        margin-top: 12px !important;
+        font-size: 0.74rem !important;
+        padding: 10px 12px !important;
+      }
+    }
+  </style>
+  <script>
+    (function () {
+      var shippingGroups = null;
+      var shippingGroupsPromise = null;
+      var apiBase = window.location.origin + '/api';
+
+      function normalize(value) {
+        return String(value || '')
+          .toLocaleLowerCase('tr-TR')
+          .replace(/\s+/g, ' ')
+          .trim();
+      }
+
+      function parseNumber(value) {
+        if (value == null) {
+          return 0;
+        }
+        var text = String(value).replace(/\./g, '').replace(',', '.').replace(/[^\d.-]/g, '');
+        var numeric = Number(text);
+        return isNaN(numeric) ? 0 : numeric;
+      }
+
+      function formatCurrency(value) {
+        return Number(value || 0).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' TL';
+      }
+
+      function ensureShippingGroups() {
+        if (shippingGroups) {
+          return Promise.resolve(shippingGroups);
+        }
+        if (!shippingGroupsPromise) {
+          shippingGroupsPromise = fetch(apiBase + '/shipping/groups').then(function (response) {
+            if (!response.ok) {
+              throw new Error('shipping groups load failed');
+            }
+            return response.json();
+          }).then(function (rows) {
+            shippingGroups = (Array.isArray(rows) ? rows : []).filter(function (row) {
+              return Number(row.is_active == null ? 1 : row.is_active) !== 0;
+            }).sort(function (a, b) {
+              return Number(a.min_desi || 0) - Number(b.min_desi || 0);
+            });
+            return shippingGroups;
+          }).catch(function () {
+            shippingGroups = [];
+            return shippingGroups;
+          });
+        }
+        return shippingGroupsPromise;
+      }
+
+      function findInputGroup(form, keywords) {
+        var groups = form.querySelectorAll('.admin-form-group, .form-group, .col');
+        return Array.prototype.find.call(groups, function (group) {
+          var text = normalize(group.textContent);
+          return keywords.every(function (keyword) {
+            return text.indexOf(keyword) !== -1;
+          });
+        }) || null;
+      }
+
+      function resolveInput(group) {
+        return group ? group.querySelector('input, select, textarea') : null;
+      }
+
+      function matchGroupByDesi(groups, desi) {
+        var totalDesi = Math.max(0, Number(desi || 0));
+        if (!totalDesi || !groups.length) {
+          return null;
+        }
+        return Array.prototype.find.call(groups, function (group) {
+          var min = Math.max(1, Number(group.min_desi || 1));
+          var max = group.max_desi == null || group.max_desi === '' ? Infinity : Number(group.max_desi);
+          return totalDesi >= min && totalDesi <= max;
+        }) || groups[groups.length - 1] || null;
+      }
+
+      function ensureSummaryBox(container) {
+        var existing = container.querySelector('.admin-desi-summary');
+        if (existing) {
+          return existing;
+        }
+        var summary = document.createElement('div');
+        summary.className = 'admin-desi-summary';
+        summary.innerHTML =
+          '<div class="admin-desi-summary-title">Desi Maliyet Ozeti</div>' +
+          '<div class="admin-desi-summary-row"><span>Urun Fiyati</span><strong data-role="base-price">0,00 TL</strong></div>' +
+          '<div class="admin-desi-summary-row"><span>Desi Ek Ucreti</span><strong data-role="desi-fee">0,00 TL</strong></div>' +
+          '<div class="admin-desi-summary-row"><span>Toplam Gosterim</span><strong data-role="total-price">0,00 TL</strong></div>' +
+          '<div class="admin-desi-summary-muted" data-role="group-name">Desi araligi bekleniyor.</div>';
+        container.appendChild(summary);
+        return summary;
+      }
+
+      function updateSummary(form, priceInput, desiInput) {
+        ensureShippingGroups().then(function (groups) {
+          if (!form.isConnected) {
+            return;
+          }
+          var host = desiInput.closest('.admin-form-group, .form-group, .col') || desiInput.parentElement || form;
+          var summary = ensureSummaryBox(host);
+          var basePrice = parseNumber(priceInput.value);
+          var desi = parseNumber(desiInput.value);
+          var group = matchGroupByDesi(groups, desi);
+          var desiFee = group ? parseNumber(group.price != null ? group.price : group.base_fee) : 0;
+          var total = basePrice + desiFee;
+          summary.querySelector('[data-role="base-price"]').textContent = formatCurrency(basePrice);
+          summary.querySelector('[data-role="desi-fee"]').textContent = formatCurrency(desiFee);
+          summary.querySelector('[data-role="total-price"]').textContent = formatCurrency(total);
+          summary.querySelector('[data-role="group-name"]').textContent = group
+            ? ('Aktif aralik: ' + (group.name || ('DHL Express ' + group.min_desi + '-' + (group.max_desi == null ? '+' : group.max_desi) + ' desi')))
+            : 'Desi girildiginde uygun DHL Express araligi burada gosterilir.';
+        });
+      }
+
+      function bindAdminDesiSummary() {
+        var forms = document.querySelectorAll('form');
+        Array.prototype.forEach.call(forms, function (form) {
+          if (form.dataset.desiSummaryBound === '1') {
+            return;
+          }
+          var priceGroup = findInputGroup(form, ['fiyat']) || findInputGroup(form, ['price']);
+          var desiGroup = findInputGroup(form, ['desi']);
+          if (!priceGroup || !desiGroup) {
+            return;
+          }
+          var priceInput = resolveInput(priceGroup);
+          var desiInput = resolveInput(desiGroup);
+          if (!priceInput || !desiInput) {
+            return;
+          }
+          form.dataset.desiSummaryBound = '1';
+          var render = function () { updateSummary(form, priceInput, desiInput); };
+          priceInput.addEventListener('input', render);
+          desiInput.addEventListener('input', render);
+          priceInput.addEventListener('change', render);
+          desiInput.addEventListener('change', render);
+          render();
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        bindAdminDesiSummary();
+        var observer = new MutationObserver(function () {
+          bindAdminDesiSummary();
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+      });
+    })();
+  </script>
+  <script>
+    (function () {
+      var modal;
+
+      function ensureModal() {
+        if (modal) {
+          return modal;
+        }
+
+        modal = document.createElement('div');
+        modal.className = 'maintenance-modal-backdrop';
+        modal.innerHTML =
+          '<div class="maintenance-modal" role="dialog" aria-modal="true" aria-label="Blog bakimda">' +
+          '<div class="maintenance-lock">&#128274;</div>' +
+          '<h3>Blog Bakimda</h3>' +
+          '<p>Blog sayfamiz su anda bakimda. Sabriniz icin tesekkurler, en yakin zamanda yeniden acilacak.</p>' +
+          '<button type="button" class="btn-primary maintenance-close">Tamam</button>' +
+          '</div>';
+
+        modal.addEventListener('click', function (event) {
+          if (event.target === modal || event.target.closest('.maintenance-close')) {
+            modal.classList.remove('open');
+          }
+        });
+
+        document.body.appendChild(modal);
+        return modal;
+      }
+
+      function isBlogTrigger(node) {
+        if (!node) {
+          return false;
+        }
+
+        var text = String(node.textContent || '').toLocaleLowerCase('tr-TR').trim();
+        var href = String(node.getAttribute('href') || '').toLocaleLowerCase('tr-TR');
+        return text === 'blog' || href.indexOf('blog') !== -1;
+      }
+
+      document.addEventListener('click', function (event) {
+        var trigger = event.target.closest('a, button');
+        if (!isBlogTrigger(trigger)) {
+          return;
+        }
+
+        event.preventDefault();
+        ensureModal().classList.add('open');
+      });
+    })();
+  </script>
+  <script type="module" crossorigin src="/assets/index-BxoXtaFZ.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-DeJ31cXF.css">
+</head>
+
+<body>
+  <div id="root"></div>
+</body>
+
+</html>

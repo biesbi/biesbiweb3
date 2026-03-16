@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Loading Check</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: white;
+        }
+        .success { border-left: 4px solid green; }
+        .error { border-left: 4px solid red; }
+        .info { border-left: 4px solid blue; }
+    </style>
+</head>
+<body>
+    <h1>Dosya Yükleme Testi</h1>
+    <div id="status-container">
+        <div class="status info">Test başlatılıyor...</div>
+    </div>
+
+    <script>
+        const container = document.getElementById('status-container');
+
+        function addStatus(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.textContent = message;
+            container.appendChild(div);
+        }
+
+        // CSS dosyasını kontrol et
+        fetch('/assets/index-DeJ31cXF.css?v=20260315-3')
+            .then(response => {
+                if (response.ok) {
+                    addStatus('✓ CSS dosyası yüklendi: ' + response.status, 'success');
+                } else {
+                    addStatus('✗ CSS dosyası yüklenemedi: ' + response.status, 'error');
+                }
+            })
+            .catch(err => {
+                addStatus('✗ CSS fetch hatası: ' + err.message, 'error');
+            });
+
+        // JS dosyasını kontrol et
+        fetch('/assets/index-BxoXtaFZ.js?v=20260315-3')
+            .then(response => {
+                if (response.ok) {
+                    addStatus('✓ JavaScript dosyası yüklendi: ' + response.status, 'success');
+                } else {
+                    addStatus('✗ JavaScript dosyası yüklenemedi: ' + response.status, 'error');
+                }
+            })
+            .catch(err => {
+                addStatus('✗ JS fetch hatası: ' + err.message, 'error');
+            });
+
+        // API kontrolü
+        fetch('/api/health')
+            .then(response => {
+                if (response.ok) {
+                    return response.json().then(data => {
+                        addStatus('✓ API çalışıyor: ' + JSON.stringify(data), 'success');
+                    });
+                } else {
+                    addStatus('✗ API yanıt vermedi: ' + response.status, 'error');
+                }
+            })
+            .catch(err => {
+                addStatus('ℹ API kontrol hatası (normal olabilir): ' + err.message, 'info');
+            });
+
+        // Console hatalarını yakala
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            addStatus('✗ JavaScript Hatası: ' + msg + ' (' + url + ':' + lineNo + ')', 'error');
+            return false;
+        };
+
+        // Root div kontrolü
+        setTimeout(() => {
+            const root = document.getElementById('root');
+            if (root) {
+                addStatus('ℹ #root div index.html\'de bulundu', 'info');
+            } else {
+                addStatus('✗ #root div BULUNAMADI!', 'error');
+            }
+        }, 100);
+    </script>
+</body>
+</html>

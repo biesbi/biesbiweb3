@@ -1,0 +1,28 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # ── API isteklerini PHP'ye yönlendir ──────────
+  # /api/* ile başlayan her şey api/index.php'ye gider
+  # PHP dosyalarına doğrudan erişime izin ver (gethash.php, setup.php vb.)
+  RewriteCond %{REQUEST_URI} ^/api/.*\.php$ [NC]
+  RewriteRule ^ - [L]
+
+  RewriteCond %{REQUEST_URI} ^/api
+  RewriteRule ^api/(.*)$ api/index.php [QSA,L]
+
+  # ── Statik dosyalar olduğu gibi serve edilsin ─
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME} !-l
+
+  # ── Geri kalan her şey React SPA'ya ──────────
+  RewriteRule . /index.html [L]
+</IfModule>
+
+# PDF dosyalarını tarayıcıda doğrudan aç (indirmeyi zorlama)
+<FilesMatch "\.pdf$">
+    Header set Content-Disposition "inline"
+    Header set Content-Type "application/pdf"
+</FilesMatch>

@@ -1,0 +1,634 @@
+<?php
+
+function env(string $key, mixed $default = null): mixed {
+    return defined($key) ? constant($key) : $default;
+}
+
+function freeShippingThreshold(): float {
+    $value = env('FREE_SHIPPING_THRESHOLD', 2500);
+    $threshold = is_numeric($value) ? (float) $value : 2500.0;
+    return $threshold > 0 ? $threshold : 2500.0;
+}
+
+function authHeaderValue(): string {
+    $candidates = [
+        $_SERVER['HTTP_AUTHORIZATION'] ?? null,
+        $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? null,
+        $_SERVER['Authorization'] ?? null,
+    ];
+
+    if (function_exists('getallheaders')) {
+        $headers = getallheaders();
+        if (is_array($headers)) {
+            $candidates[] = $headers['Authorization'] ?? ($headers['authorization'] ?? null);
+        }
+    }
+
+    foreach ($candidates as $value) {
+        if (is_string($value) && trim($value) !== '') {
+            return trim($value);
+        }
+    }
+
+    return '';
+}
+
+function db(): PDO {
+    static $pdo = null;
+
+    if ($pdo === null) {
+        $dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=' . DB_CHARSET;
+        $pdo = new PDO($dsn, DB_USER, DB_PASS, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES => false,
+            PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4 COLLATE utf8mb4_turkish_ci"
+        ]);
+    }
+
+    return $pdo;
+}
+
+function json(mixed $data, int $status = 200): never {
+    http_response_code($status);
+    echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    exit;
+}
+
+function ok(mixed $data = null, string $message = 'success'): never {
+    if ($data === null) {
+        json(['success' => true, 'message' => $message]);
+    }
+
+    json($data);
+}
+
+function error(string $message, int $status = 400): never {
+    json(['success' => false, 'message' => $message], $status);
+}
+
+function body(): array {
+    static $data = null;
+
+    if ($data !== null) {
+        return $data;
+    }
+
+    $contentType = strtolower((string) ($_SERVER['CONTENT_TYPE'] ?? ''));
+    $raw = file_get_contents('php://input');
+
+    if (
+        str_contains($contentType, 'application/json')
+        || ($raw !== '' && str_starts_with(ltrim($raw), '{'))
+        || ($raw !== '' && str_starts_with(ltrim($raw), '['))
+    ) {
+        $decoded = json_decode($raw, true);
+        $data = is_array($decoded) ? $decoded : [];
+    } else {
+        $data = $_POST;
+    }
+
+    return $data;
+}
+
+function input(string $key, mixed $default = null): mixed {
+    $data = body();
+    if (array_key_exists($key, $data)) {
+        return $data[$key];
+    }
+
+    if (array_key_exists($key, $_POST)) {
+        return $_POST[$key];
+    }
+
+    if (array_key_exists($key, $_GET)) {
+        return $_GET[$key];
+    }
+
+    return $default;
+}
+
+function jwtEncode(array $payload): string {
+    $header = base64url(json_encode(['alg' => 'HS256', 'typ' => 'JWT']));
+    $payload['iat'] = time();
+    $payload['exp'] = time() + JWT_EXPIRE;
+    $body = base64url(json_encode($payload));
+    $sig = base64url(hash_hmac('sha256', "$header.$body", JWT_SECRET, true));
+    return "$header.$body.$sig";
+}
+
+function jwtDecode(string $token): ?array {
+    $parts = explode('.', $token);
+    if (count($parts) !== 3) {
+        return null;
+    }
+
+    [$header, $body, $sig] = $parts;
+    $expected = base64url(hash_hmac('sha256', "$header.$body", JWT_SECRET, true));
+    if (!hash_equals($expected, $sig)) {
+        return null;
+    }
+
+    $payload = json_decode(base64_decode(strtr($body, '-_', '+/')), true);
+    if (!$payload || ($payload['exp'] ?? 0) < time()) {
+        return null;
+    }
+
+    return $payload;
+}
+
+function base64url(string $data): string {
+    return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+}
+
+function authRequired(): array {
+    $header = authHeaderValue();
+    if (!str_starts_with($header, 'Bearer ')) {
+        error('Token gerekli.', 401);
+    }
+
+    $payload = jwtDecode(substr($header, 7));
+    if (!$payload) {
+        error('Token gecersiz veya suresi dolmus.', 401);
+    }
+
+    return $payload;
+}
+
+function adminRequired(): array {
+    $payload = authRequired();
+    if (($payload['role'] ?? '') !== 'admin') {
+        error('Yetkiniz yok.', 403);
+    }
+
+    return $payload;
+}
+
+function slugify(string $value): string {
+    $map = [
+        'ş' => 's', 'Ş' => 'S',
+        'ı' => 'i', 'İ' => 'I',
+        'ğ' => 'g', 'Ğ' => 'G',
+        'ü' => 'u', 'Ü' => 'U',
+        'ö' => 'o', 'Ö' => 'O',
+        'ç' => 'c', 'Ç' => 'C',
+    ];
+
+    $value = strtr($value, $map);
+    $value = strtolower($value);
+    $value = preg_replace('/[^a-z0-9]+/', '-', $value);
+    return trim($value, '-');
+}
+
+function uniqueSlug(string $table, string $value, ?string $ignoreId = null): string {
+    $base = slugify($value);
+    $base = $base !== '' ? $base : 'item';
+
+    if (!tableHasColumn($table, 'slug')) {
+        return $base;
+    }
+
+    $slug = $base;
+    $counter = 2;
+
+    while (true) {
+        $sql = "SELECT id FROM {$table} WHERE slug = ? LIMIT 1";
+        $params = [$slug];
+        if ($ignoreId !== null) {
+            $sql = "SELECT id FROM {$table} WHERE slug = ? AND id <> ? LIMIT 1";
+            $params[] = $ignoreId;
+        }
+
+        $stmt = db()->prepare($sql);
+        $stmt->execute($params);
+        $row = $stmt->fetch();
+        if (!$row) {
+            return $slug;
+        }
+
+        $slug = $base . '-' . $counter;
+        $counter++;
+    }
+}
+
+function normalizeImages(mixed $images): array {
+    if (is_string($images)) {
+        $decoded = json_decode($images, true);
+        $images = json_last_error() === JSON_ERROR_NONE ? $decoded : [$images];
+    }
+
+    if (!is_array($images)) {
+        return [];
+    }
+
+    $normalized = [];
+    foreach ($images as $image) {
+        if (is_string($image) && $image !== '') {
+            $normalized[] = $image;
+            continue;
+        }
+
+        if (is_array($image)) {
+            foreach (['url', 'original', 'medium', 'thumb', 'src'] as $key) {
+                if (!empty($image[$key]) && is_string($image[$key])) {
+                    $normalized[] = $image[$key];
+                    break;
+                }
+            }
+        }
+    }
+
+    return array_values(array_unique($normalized));
+}
+
+function legacyProduct(array $product): array {
+    $productId = (string) ($product['id'] ?? '');
+    $imagesByProductId = $productId !== ''
+        ? ProductCatalogService::fetchProductImagesByProductIds([$productId])
+        : [];
+
+    return ProductCatalogService::enrichProduct(
+        $product,
+        $imagesByProductId[$productId] ?? [],
+        true
+    );
+}
+
+function legacyOrder(array $order): array {
+    $shipping = [];
+    if (!empty($order['shipping_address']) && is_string($order['shipping_address'])) {
+        $decoded = json_decode($order['shipping_address'], true);
+        if (is_array($decoded)) {
+            $shipping = $decoded;
+        }
+    }
+
+    return [
+        ...$order,
+        'id' => (string) ($order['id'] ?? ''),
+        'date' => $order['created_at'] ?? ($order['date'] ?? null),
+        'createdAt' => $order['created_at'] ?? ($order['createdAt'] ?? null),
+        'cargo_number' => $order['tracking_no'] ?? ($order['cargo_number'] ?? null),
+        'cargo_company' => $order['cargo_carrier'] ?? ($order['cargo_company'] ?? null),
+        'order_note' => $order['order_note'] ?? ($order['orderNote'] ?? null),
+        'shipping_total_desi' => isset($order['shipping_total_desi']) ? (float) $order['shipping_total_desi'] : 0.0,
+        'free_shipping_applied' => !empty($order['free_shipping_applied']),
+        'payment_provider' => $order['payment_provider'] ?? null,
+        'payment_reference' => $order['payment_reference'] ?? null,
+        'shippingAddress' => [
+            'fullname' => $order['fullname'] ?? ($shipping['fullname'] ?? null),
+            'email' => $order['email'] ?? ($shipping['email'] ?? null),
+            'phone' => $order['phone'] ?? ($shipping['phone'] ?? null),
+            'city' => $order['city'] ?? ($shipping['city'] ?? null),
+            'district' => $order['district'] ?? ($shipping['district'] ?? null),
+            'neighborhood' => $order['neighborhood'] ?? ($shipping['neighborhood'] ?? null),
+            'street' => $order['street'] ?? ($shipping['street'] ?? null),
+            'address_detail' => $order['address_detail'] ?? ($shipping['address_detail'] ?? null),
+        ],
+        'total' => isset($order['total']) ? (float) $order['total'] : 0.0,
+        'subtotal' => isset($order['subtotal']) ? (float) $order['subtotal'] : 0.0,
+        'discount' => isset($order['discount']) ? (float) $order['discount'] : 0.0,
+    ];
+}
+
+function legacyUser(array $user): array {
+    return [
+        ...$user,
+        'name' => $user['display_name'] ?? ($user['name'] ?? ($user['username'] ?? '')),
+        'isAdmin' => ($user['role'] ?? '') === 'admin',
+        'orders' => $user['orders'] ?? [],
+    ];
+}
+
+function tableHasColumn(string $table, string $column): bool {
+    static $cache = [];
+    $key = $table . '.' . $column;
+
+    if (array_key_exists($key, $cache)) {
+        return $cache[$key];
+    }
+
+    // Dosya bazlı önbellek — information_schema sorguları her istekte tekrarlanmasın
+    $cacheFile = sys_get_temp_dir() . '/schema_cache_' . md5(DB_NAME) . '.php';
+    if (!isset($GLOBALS['_schema_file_cache'])) {
+        $GLOBALS['_schema_file_cache'] = [];
+        if (is_file($cacheFile) && (time() - filemtime($cacheFile)) < 3600) {
+            $loaded = @include $cacheFile;
+            if (is_array($loaded)) {
+                $GLOBALS['_schema_file_cache'] = $loaded;
+                $cache = $loaded;
+            }
+        }
+    }
+
+    if (array_key_exists($key, $GLOBALS['_schema_file_cache'])) {
+        $cache[$key] = $GLOBALS['_schema_file_cache'][$key];
+        return $cache[$key];
+    }
+
+    $stmt = db()->prepare(
+        'SELECT COUNT(*)
+         FROM information_schema.COLUMNS
+         WHERE TABLE_SCHEMA = DATABASE()
+           AND TABLE_NAME = ?
+           AND COLUMN_NAME = ?'
+    );
+    $stmt->execute([$table, $column]);
+
+    $result = ((int) $stmt->fetchColumn()) > 0;
+    $cache[$key] = $result;
+    $GLOBALS['_schema_file_cache'][$key] = $result;
+
+    // Önbelleği diske yaz
+    $export = var_export($GLOBALS['_schema_file_cache'], true);
+    @file_put_contents($cacheFile, "<?php return $export;", LOCK_EX);
+
+    return $result;
+}
+
+function tableColumnType(string $table, string $column): ?string {
+    static $cache = [];
+    $key = $table . '.' . $column;
+
+    if (array_key_exists($key, $cache)) {
+        return $cache[$key];
+    }
+
+    $stmt = db()->prepare(
+        'SELECT COLUMN_TYPE
+         FROM information_schema.COLUMNS
+         WHERE TABLE_SCHEMA = DATABASE()
+           AND TABLE_NAME = ?
+           AND COLUMN_NAME = ?
+         LIMIT 1'
+    );
+    $stmt->execute([$table, $column]);
+
+    $value = $stmt->fetchColumn();
+    $cache[$key] = is_string($value) ? strtolower($value) : null;
+    return $cache[$key];
+}
+
+function generatePublicId(int $bytes = 16): string {
+    return strtolower(bin2hex(random_bytes($bytes)));
+}
+
+function tableExists(string $table): bool {
+    static $cache = [];
+
+    if (array_key_exists($table, $cache)) {
+        return $cache[$table];
+    }
+
+    $stmt = db()->prepare(
+        'SELECT COUNT(*)
+         FROM information_schema.TABLES
+         WHERE TABLE_SCHEMA = DATABASE()
+           AND TABLE_NAME = ?'
+    );
+    $stmt->execute([$table]);
+
+    $cache[$table] = ((int) $stmt->fetchColumn()) > 0;
+    return $cache[$table];
+}
+
+function ensureShippingGroupsSchema(): void {
+    if (!tableExists('shipping_groups')) {
+        return;
+    }
+
+    if (!tableHasColumn('shipping_groups', 'min_desi')) {
+        db()->exec('ALTER TABLE shipping_groups ADD COLUMN min_desi INT UNSIGNED NOT NULL DEFAULT 1 AFTER carrier');
+    }
+    if (!tableHasColumn('shipping_groups', 'max_desi')) {
+        db()->exec('ALTER TABLE shipping_groups ADD COLUMN max_desi INT UNSIGNED NULL AFTER min_desi');
+    }
+
+    $rows = db()->query('SELECT id, min_desi, max_desi FROM shipping_groups ORDER BY id ASC')->fetchAll();
+    if ($rows === []) {
+        $stmt = db()->prepare(
+            'INSERT INTO shipping_groups (name, carrier, min_desi, max_desi, base_fee, free_above, is_active)
+             VALUES (?,?,?,?,?,?,?)'
+        );
+        foreach (defaultShippingGroups() as $group) {
+            $stmt->execute([
+                $group['name'],
+                $group['carrier'],
+                $group['min_desi'],
+                $group['max_desi'],
+                $group['base_fee'],
+                $group['free_above'],
+                $group['is_active'],
+            ]);
+        }
+        return;
+    }
+
+    $hasUsefulRange = false;
+    foreach ($rows as $row) {
+        if ((int) ($row['min_desi'] ?? 0) > 1 || $row['max_desi'] !== null) {
+            $hasUsefulRange = true;
+            break;
+        }
+    }
+
+    if ($hasUsefulRange) {
+        dedupeShippingGroups();
+        return;
+    }
+
+    $defaults = defaultShippingGroups();
+    $update = db()->prepare(
+        'UPDATE shipping_groups
+         SET name = ?, carrier = ?, min_desi = ?, max_desi = ?, base_fee = ?, free_above = ?, is_active = ?
+         WHERE id = ?'
+    );
+
+    foreach ($rows as $index => $row) {
+        $group = $defaults[$index] ?? end($defaults);
+        $update->execute([
+            $group['name'],
+            $group['carrier'],
+            $group['min_desi'],
+            $group['max_desi'],
+            $group['base_fee'],
+            $group['free_above'],
+            $group['is_active'],
+            $row['id'],
+        ]);
+    }
+
+    if (count($rows) < count($defaults)) {
+        $insert = db()->prepare(
+            'INSERT INTO shipping_groups (name, carrier, min_desi, max_desi, base_fee, free_above, is_active)
+             VALUES (?,?,?,?,?,?,?)'
+        );
+        for ($i = count($rows); $i < count($defaults); $i++) {
+            $group = $defaults[$i];
+            $insert->execute([
+                $group['name'],
+                $group['carrier'],
+                $group['min_desi'],
+                $group['max_desi'],
+                $group['base_fee'],
+                $group['free_above'],
+                $group['is_active'],
+            ]);
+        }
+    }
+
+    dedupeShippingGroups();
+}
+
+function dedupeShippingGroups(): void {
+    if (!tableExists('shipping_groups')) {
+        return;
+    }
+
+    $rows = db()->query(
+        'SELECT id, carrier, min_desi, max_desi
+         FROM shipping_groups
+         ORDER BY id ASC'
+    )->fetchAll();
+
+    $seen = [];
+    $deleteIds = [];
+    foreach ($rows as $row) {
+        $key = implode('|', [
+            strtolower((string) ($row['carrier'] ?? '')),
+            (int) ($row['min_desi'] ?? 0),
+            $row['max_desi'] === null ? 'null' : (int) $row['max_desi'],
+        ]);
+
+        if (isset($seen[$key])) {
+            $deleteIds[] = (int) $row['id'];
+            continue;
+        }
+
+        $seen[$key] = true;
+    }
+
+    if ($deleteIds === []) {
+        return;
+    }
+
+    $placeholders = implode(',', array_fill(0, count($deleteIds), '?'));
+    db()->prepare("DELETE FROM shipping_groups WHERE id IN ($placeholders)")->execute($deleteIds);
+}
+
+function defaultShippingGroups(): array {
+    return [
+        ['name' => 'DHL Express 1-2 Desi', 'carrier' => 'DHL Express', 'min_desi' => 1, 'max_desi' => 2, 'base_fee' => 79.90, 'free_above' => null, 'is_active' => 1],
+        ['name' => 'DHL Express 3-5 Desi', 'carrier' => 'DHL Express', 'min_desi' => 3, 'max_desi' => 5, 'base_fee' => 119.90, 'free_above' => null, 'is_active' => 1],
+        ['name' => 'DHL Express 6-9 Desi', 'carrier' => 'DHL Express', 'min_desi' => 6, 'max_desi' => 9, 'base_fee' => 159.90, 'free_above' => null, 'is_active' => 1],
+        ['name' => 'DHL Express 10-14 Desi', 'carrier' => 'DHL Express', 'min_desi' => 10, 'max_desi' => 14, 'base_fee' => 219.90, 'free_above' => null, 'is_active' => 1],
+        ['name' => 'DHL Express 15+ Desi', 'carrier' => 'DHL Express', 'min_desi' => 15, 'max_desi' => null, 'base_fee' => 279.90, 'free_above' => null, 'is_active' => 1],
+    ];
+}
+
+function normalizeShippingGroup(array $row): array {
+    $price = isset($row['price']) ? (float) $row['price'] : (float) ($row['base_fee'] ?? 0);
+
+    return [
+        ...$row,
+        'carrier' => $row['carrier'] ?? 'DHL Express',
+        'min_desi' => max(1, (int) ($row['min_desi'] ?? 1)),
+        'max_desi' => isset($row['max_desi']) && $row['max_desi'] !== null ? (int) $row['max_desi'] : null,
+        'base_fee' => $price,
+        'price' => $price,
+        'is_active' => isset($row['is_active']) ? (int) $row['is_active'] : 1,
+    ];
+}
+
+function calculateShippingFeeByDesi(float $totalDesi, float $orderTotal = 0, ?int $groupId = null): array {
+    ensureShippingGroupsSchema();
+
+    if (!tableExists('shipping_groups')) {
+        $fallback = $totalDesi <= 0 ? 0.0 : max(50.0, ceil($totalDesi) * 12.5);
+        return ['cost' => $fallback, 'fee' => $fallback, 'carrier' => 'DHL Express', 'group_name' => null, 'group_id' => null];
+    }
+
+    $params = [];
+    $sql = 'SELECT id, name, carrier, min_desi, max_desi, base_fee, free_above, is_active
+            FROM shipping_groups
+            WHERE is_active = 1';
+
+    if ($groupId !== null && $groupId > 0) {
+        $sql .= ' AND id = ?';
+        $params[] = $groupId;
+    } else {
+        $sql .= ' AND min_desi <= ? AND (max_desi IS NULL OR max_desi >= ?)';
+        $params[] = max(1, (int) ceil($totalDesi));
+        $params[] = max(1, (int) ceil($totalDesi));
+    }
+
+    $sql .= ' ORDER BY min_desi ASC LIMIT 1';
+    $stmt = db()->prepare($sql);
+    $stmt->execute($params);
+    $group = $stmt->fetch();
+
+    if (!$group && $groupId === null) {
+        $stmt = db()->query(
+            'SELECT id, name, carrier, min_desi, max_desi, base_fee, free_above, is_active
+             FROM shipping_groups
+             WHERE is_active = 1
+             ORDER BY COALESCE(max_desi, 999999) DESC, min_desi DESC
+             LIMIT 1'
+        );
+        $group = $stmt->fetch();
+    }
+
+    if (!$group) {
+        $fallback = $totalDesi <= 0 ? 0.0 : max(50.0, ceil($totalDesi) * 12.5);
+        return ['cost' => $fallback, 'fee' => $fallback, 'carrier' => 'DHL Express', 'group_name' => null, 'group_id' => null];
+    }
+
+    $group = normalizeShippingGroup($group);
+    $freeAbove = $group['free_above'] !== null
+        ? min((float) $group['free_above'], freeShippingThreshold())
+        : freeShippingThreshold();
+
+    $cost = ($orderTotal >= $freeAbove)
+        ? 0.0
+        : (float) $group['base_fee'];
+
+    return [
+        'cost' => $cost,
+        'fee' => $cost,
+        'carrier' => $group['carrier'],
+        'group_name' => $group['name'],
+        'group_id' => $group['id'] ?? null,
+        'group' => $group,
+        'free_shipping_threshold' => $freeAbove,
+        'free_shipping_applied' => $orderTotal >= $freeAbove,
+    ];
+}
+
+function cors(): void {
+    $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $hostOrigin = isset($_SERVER['HTTP_HOST']) ? $scheme . '://' . $_SERVER['HTTP_HOST'] : '';
+
+    $allowed = array_filter([
+        ALLOWED_ORIGIN,
+        $hostOrigin,
+        'http://localhost:5173',
+        'http://localhost:3000',
+        'http://localhost',
+    ]);
+
+    if ($origin !== '' && in_array($origin, $allowed, true)) {
+        header("Access-Control-Allow-Origin: $origin");
+    } else {
+        header('Access-Control-Allow-Origin: ' . ($hostOrigin !== '' ? $hostOrigin : ALLOWED_ORIGIN));
+    }
+
+    header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');
+    header('Access-Control-Allow-Headers: Content-Type, Authorization');
+    header('Content-Type: application/json; charset=utf-8');
+
+    if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'OPTIONS') {
+        http_response_code(204);
+        exit;
+    }
+}

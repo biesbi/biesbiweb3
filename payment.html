@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ödeme - BoomerItems</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/logo_v2_cube.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 900px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .iframe-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            border: none;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .loading .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #fee;
+            border: 1px solid #fcc;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            color: #c33;
+        }
+
+        .error h3 {
+            margin-bottom: 10px;
+        }
+
+        .info {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .back-button {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+
+        .back-button:hover {
+            background: #5568d3;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .iframe-container {
+                height: 500px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔒 Güvenli Ödeme</h1>
+            <p>PayTR ile güvenli ödeme sayfasına yönlendiriliyorsunuz</p>
+        </div>
+
+        <div class="content">
+            <div id="payment-container">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Ödeme sayfası hazırlanıyor...</p>
+                    <small style="color: #666;">Lütfen bekleyiniz</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // URL'den order_id al
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = urlParams.get('order_id');
+
+        if (!orderId) {
+            showError('Sipariş bilgisi bulunamadı. Lütfen sepetten tekrar deneyin.');
+        } else {
+            initPayment(orderId);
+        }
+
+        async function initPayment(orderId) {
+            try {
+                // Sipariş bilgilerini al ve ödeme başlat
+                const response = await fetch(`/api/payments/paytr/status/${orderId}`);
+                const data = await response.json();
+
+                if (!data.success) {
+                    showError(data.message || 'Ödeme başlatılamadı.');
+                    return;
+                }
+
+                const order = data.order;
+
+                // PayTR token'ı varsa iframe göster
+                if (data.paytr_token) {
+                    showPaymentIframe(data.paytr_token, order);
+                } else {
+                    showError('Ödeme token\'ı oluşturulamadı. Lütfen tekrar deneyin.');
+                }
+            } catch (error) {
+                console.error('Payment init error:', error);
+                showError('Bir hata oluştu: ' + error.message);
+            }
+        }
+
+        function showPaymentIframe(token, order) {
+            const container = document.getElementById('payment-container');
+            const paymentUrl = `https://www.paytr.com/odeme/guvenli/${encodeURIComponent(token)}`;
+
+            container.innerHTML = `
+                <div class="info">
+                    <strong>Sipariş No:</strong> ${escapeHtml(order.id)}<br>
+                    <strong>Tutar:</strong> ${formatPrice(order.total)} TL
+                </div>
+                <div class="iframe-container">
+                    <iframe
+                        src="${escapeHtml(paymentUrl)}"
+                        frameborder="0"
+                        scrolling="yes"
+                        allow="payment">
+                    </iframe>
+                </div>
+            `;
+
+            // Ödeme sonucunu kontrol et (polling)
+            startPaymentPolling(order.id);
+        }
+
+        function startPaymentPolling(orderId) {
+            let attempts = 0;
+            const maxAttempts = 60; // 5 dakika (5 saniyede bir kontrol)
+
+            const interval = setInterval(async () => {
+                attempts++;
+
+                try {
+                    const response = await fetch(`/api/payments/paytr/status/${orderId}`);
+                    const data = await response.json();
+
+                    if (data.success && data.order) {
+                        const paymentStatus = data.payment_status || data.order.payment_status;
+
+                        if (paymentStatus === 'paid') {
+                            clearInterval(interval);
+                            window.location.href = `/paytr-result.html?status=success&order_id=${encodeURIComponent(orderId)}`;
+                        } else if (paymentStatus === 'failed') {
+                            clearInterval(interval);
+                            window.location.href = `/paytr-result.html?status=failed&order_id=${encodeURIComponent(orderId)}`;
+                        }
+                    }
+                } catch (error) {
+                    console.error('Polling error:', error);
+                }
+
+                if (attempts >= maxAttempts) {
+                    clearInterval(interval);
+                }
+            }, 5000); // 5 saniyede bir kontrol
+        }
+
+        function showError(message) {
+            const container = document.getElementById('payment-container');
+            container.innerHTML = `
+                <div class="error">
+                    <h3>Hata</h3>
+                    <p>${escapeHtml(message)}</p>
+                </div>
+                <a href="/" class="back-button">← Ana Sayfaya Dön</a>
+            `;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatPrice(price) {
+            return parseFloat(price).toFixed(2).replace('.', ',');
+        }
+    </script>
+</body>
+</html>

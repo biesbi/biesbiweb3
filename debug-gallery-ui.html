@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Gallery Manager Debug</title>
+<style>
+body { font-family: monospace; padding: 20px; background: #1a1a1a; color: #0f0; }
+h1 { color: #0ff; }
+.check { color: #0f0; }
+.error { color: #f00; }
+.warning { color: #ff0; }
+pre { background: #000; padding: 10px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<h1>🔍 Gallery Manager Debug</h1>
+<pre id="output"></pre>
+
+<script>
+const output = document.getElementById('output');
+
+function log(msg, type = 'info') {
+  const span = document.createElement('span');
+  span.className = type;
+  span.textContent = msg + '\n';
+  output.appendChild(span);
+}
+
+log('═══════════════════════════════════════', 'check');
+log('GALLERY MANAGER DEBUG BAŞLADI', 'check');
+log('═══════════════════════════════════════', 'check');
+log('');
+
+// 1. index.html'i fetch et ve kontrol et
+fetch('/index.html')
+  .then(r => r.text())
+  .then(html => {
+    log('1️⃣ INDEX.HTML KONTROLÜ:', 'check');
+    log('───────────────────────────────────────', 'check');
+
+    // adminMultiImageUiEnabled kontrolü
+    const multiImageMatch = html.match(/var\s+adminMultiImageUiEnabled\s*=\s*(true|false)/);
+    if (multiImageMatch) {
+      const value = multiImageMatch[1];
+      if (value === 'true') {
+        log('✅ adminMultiImageUiEnabled = true', 'check');
+      } else {
+        log('❌ adminMultiImageUiEnabled = false (DÜZELTİLMELİ!)', 'error');
+      }
+    } else {
+      log('❌ adminMultiImageUiEnabled bulunamadı!', 'error');
+    }
+    log('');
+
+    // ensureGalleryManager fonksiyonu var mı?
+    if (html.includes('function ensureGalleryManager')) {
+      log('✅ ensureGalleryManager fonksiyonu bulundu', 'check');
+    } else {
+      log('❌ ensureGalleryManager fonksiyonu YOK!', 'error');
+    }
+    log('');
+
+    // uploadQueuedImages fonksiyonu var mı?
+    if (html.includes('function uploadQueuedImages')) {
+      log('✅ uploadQueuedImages fonksiyonu bulundu', 'check');
+    } else {
+      log('❌ uploadQueuedImages fonksiyonu YOK!', 'error');
+    }
+    log('');
+
+    // Çoklu görsel UI HTML'i var mı?
+    if (html.includes('Çoklu Ürün Görselleri') || html.includes('Coklu Urun Gorselleri')) {
+      log('✅ Çoklu görsel UI HTML kodu bulundu', 'check');
+    } else {
+      log('❌ Çoklu görsel UI HTML kodu YOK!', 'error');
+    }
+    log('');
+
+    // ensureGalleryManager çağrısı yapılıyor mu?
+    const ensureCalls = html.match(/ensureGalleryManager\(/g);
+    if (ensureCalls) {
+      log('✅ ensureGalleryManager ' + ensureCalls.length + ' kez çağrılıyor', 'check');
+    } else {
+      log('❌ ensureGalleryManager hiç çağrılmıyor!', 'error');
+    }
+    log('');
+
+    log('═══════════════════════════════════════', 'check');
+    log('2️⃣ ÖNERİLER:', 'warning');
+    log('═══════════════════════════════════════', 'check');
+    log('');
+    log('Admin panele gidin ve bir ürünü düzenleyin.', 'warning');
+    log('F12 basıp Console sekmesini açın.', 'warning');
+    log('Ardından aşağıdaki komutu çalıştırın:', 'warning');
+    log('', 'warning');
+    log('document.querySelector("[data-admin-gallery-manager]")', 'check');
+    log('', 'warning');
+    log('Eğer NULL dönerse, gallery manager oluşturulmamış demektir.', 'warning');
+    log('Eğer bir element dönerse, gallery manager var ama görünmüyor olabilir.', 'warning');
+    log('');
+    log('Ayrıca şunu da deneyin:', 'warning');
+    log('', 'warning');
+    log('adminMultiImageUiEnabled', 'check');
+    log('', 'warning');
+    log('Bu true dönmeli. false dönüyorsa, index.html dosyasında', 'warning');
+    log('adminMultiImageUiEnabled değişkenini true yapın.', 'warning');
+
+  })
+  .catch(err => {
+    log('❌ HATA: ' + err.message, 'error');
+  });
+</script>
+</body>
+</html>

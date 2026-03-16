@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Gallery Debug</title>
+<style>
+  body { font-family: monospace; background: #0f172a; color: #e2e8f0; padding: 2rem; }
+  .container { max-width: 1000px; margin: 0 auto; background: #1e293b; padding: 2rem; border-radius: 12px; }
+  h1 { color: #38bdf8; margin: 0 0 1rem 0; }
+  .warning { background: #7f1d1d; padding: 1rem; border-radius: 8px; margin: 1rem 0; }
+  .success { background: #064e3b; padding: 1rem; border-radius: 8px; margin: 1rem 0; }
+  .info { background: #1e3a5f; padding: 1rem; border-radius: 8px; margin: 1rem 0; }
+  pre { background: #0f172a; padding: 1rem; border-radius: 4px; overflow-x: auto; font-size: 0.85rem; }
+  button { background: #38bdf8; color: #0f172a; padding: 0.75rem 1.5rem; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin: 0.5rem 0.5rem 0.5rem 0; }
+  button:hover { background: #0ea5e9; }
+  button.danger { background: #dc2626; color: white; }
+  input { padding: 0.5rem; margin: 0.5rem 0; border-radius: 4px; border: 1px solid #38bdf8; background: #0f172a; color: #e2e8f0; width: 300px; }
+  label { display: block; margin: 1rem 0 0.5rem 0; color: #94a3b8; font-weight: bold; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🐛 Gallery Debug Tool</h1>
+
+  <div class="warning">
+    <strong>⚠️ Bu sayfa admin paneldeki fotoğraf yükleme akışını debug etmek için hazırlandı.</strong>
+  </div>
+
+  <div class="info">
+    <h3>📋 Bilgilendirme</h3>
+    <p>Admin panelde fotoğraf yükleme şu şekilde çalışıyor:</p>
+    <ol>
+      <li>Fotoğrafları seçiyorsunuz → <code>pendingUploads</code> kuyruğuna ekleniyor</li>
+      <li>Ürünü kaydediyorsunuz (Kaydet butonuna basıyorsunuz)</li>
+      <li>Ürün başarıyla kaydedilince → Kuyruktaki fotoğraflar otomatik yükleniyor</li>
+    </ol>
+    <p><strong>Önemli:</strong> Mevcut bir ürüne fotoğraf eklemek için de ürünü tekrar kaydetmeniz gerekiyor!</p>
+  </div>
+
+  <hr style="border-color: #334155; margin: 2rem 0;">
+
+  <h2>🧪 Manuel Test</h2>
+
+  <label>1. Admin Token (JWT):</label>
+  <input type="text" id="token" placeholder="Bearer token'ınızı buraya yapıştırın">
+  <button onclick="testLogin()">🔐 Login Yap ve Token Al</button>
+  <br>
+
+  <label>2. Ürün ID:</label>
+  <input type="text" id="productId" placeholder="örn: prd-123456">
+  <button onclick="listProducts()">📋 Ürünleri Listele</button>
+  <br>
+
+  <label>3. Fotoğraf Seç:</label>
+  <input type="file" id="imageFile" accept="image/*">
+  <br>
+
+  <button onclick="uploadImage()">📤 Fotoğrafı Yükle</button>
+  <button onclick="checkDatabase()">🔍 Veritabanını Kontrol Et</button>
+  <button class="danger" onclick="clearLogs()">🗑️ Logları Temizle</button>
+
+  <div id="output"></div>
+</div>
+
+<script>
+const apiBase = '/api';
+let authToken = '';
+
+function log(message, type = 'info') {
+  const output = document.getElementById('output');
+  const div = document.createElement('div');
+  div.className = type;
+  div.innerHTML = '<pre>' + escapeHtml(message) + '</pre>';
+  output.appendChild(div);
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function clearLogs() {
+  document.getElementById('output').innerHTML = '';
+}
+
+async function testLogin() {
+  const username = prompt('Username:', 'admin');
+  const password = prompt('Password:', 'boomeritemsbaran!');
+
+  try {
+    const response = await fetch(apiBase + '/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+
+    const data = await response.json();
+
+    if (response.ok && data.token) {
+      authToken = data.token;
+      document.getElementById('token').value = authToken;
+      log('✅ Login başarılı! Token alındı.', 'success');
+      log(JSON.stringify(data, null, 2), 'info');
+    } else {
+      log('❌ Login başarısız: ' + JSON.stringify(data), 'warning');
+    }
+  } catch (error) {
+    log('❌ Login hatası: ' + error.message, 'warning');
+  }
+}
+
+async function listProducts() {
+  const token = document.getElementById('token').value || authToken;
+
+  try {
+    const response = await fetch(apiBase + '/products?limit=10', {
+      headers: token ? { 'Authorization': 'Bearer ' + token } : {}
+    });
+
+    const data = await response.json();
+    log('📦 Ürünler:', 'success');
+    log(JSON.stringify(data, null, 2), 'info');
+
+    if (Array.isArray(data) && data.length > 0) {
+      log('İlk ürün ID: ' + data[0].id, 'success');
+      document.getElementById('productId').value = data[0].id;
+    }
+  } catch (error) {
+    log('❌ Ürün listeleme hatası: ' + error.message, 'warning');
+  }
+}
+
+async function uploadImage() {
+  const token = document.getElementById('token').value || authToken;
+  const productId = document.getElementById('productId').value;
+  const fileInput = document.getElementById('imageFile');
+
+  if (!token) {
+    log('❌ Token gerekli! Önce login yapın.', 'warning');
+    return;
+  }
+
+  if (!productId) {
+    log('❌ Ürün ID gerekli!', 'warning');
+    return;
+  }
+
+  if (!fileInput.files[0]) {
+    log('❌ Fotoğraf seçilmedi!', 'warning');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('product_id', productId);
+  formData.append('image', fileInput.files[0]);
+  formData.append('is_primary', 'true');
+
+  log('📤 Yükleme başlatılıyor...', 'info');
+  log('Product ID: ' + productId, 'info');
+  log('File: ' + fileInput.files[0].name + ' (' + fileInput.files[0].size + ' bytes)', 'info');
+
+  try {
+    const response = await fetch(apiBase + '/upload/product-image', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + token
+      },
+      body: formData
+    });
+
+    log('Response Status: ' + response.status, response.ok ? 'success' : 'warning');
+
+    const data = await response.json();
+    log('Response Data:', response.ok ? 'success' : 'warning');
+    log(JSON.stringify(data, null, 2), response.ok ? 'success' : 'warning');
+
+    if (response.ok) {
+      log('✅ Fotoğraf başarıyla yüklendi!', 'success');
+      setTimeout(() => checkDatabase(), 500);
+    }
+  } catch (error) {
+    log('❌ Yükleme hatası: ' + error.message, 'warning');
+  }
+}
+
+async function checkDatabase() {
+  const token = document.getElementById('token').value || authToken;
+  const productId = document.getElementById('productId').value;
+
+  if (!productId) {
+    log('❌ Ürün ID gerekli!', 'warning');
+    return;
+  }
+
+  try {
+    const response = await fetch(apiBase + '/upload/product-image/' + productId, {
+      headers: token ? { 'Authorization': 'Bearer ' + token } : {}
+    });
+
+    const data = await response.json();
+    log('🗄️ Veritabanı Kayıtları (Product ID: ' + productId + '):', 'success');
+    log(JSON.stringify(data, null, 2), 'info');
+
+    if (Array.isArray(data)) {
+      log('Toplam ' + data.length + ' adet fotoğraf bulundu.', 'success');
+    }
+  } catch (error) {
+    log('❌ Veritabanı kontrolü hatası: ' + error.message, 'warning');
+  }
+}
+</script>
+</body>
+</html>

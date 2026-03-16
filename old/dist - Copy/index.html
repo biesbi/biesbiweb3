@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bakımdayız - BoomerItems</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FFD500;
+            /* LEGO Yellow */
+            --secondary: #E3000B;
+            /* LEGO Red */
+            --accent: #006CB7;
+            /* LEGO Blue */
+            --dark: #1A1A1A;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            color: white;
+            position: relative;
+        }
+
+        /* Background Image with Overlay */
+        .bg-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 100%),
+                url('lego.png');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            transform: scale(1.1);
+            animation: slowZoom 20s infinite alternate linear;
+        }
+
+        @keyframes slowZoom {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.1);
+            }
+        }
+
+        .container {
+            text-align: center;
+            padding: 3rem;
+            max-width: 800px;
+            backdrop-filter: blur(15px);
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 1s ease-out;
+            position: relative;
+            margin: 20px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo-construction {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .brick {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            position: relative;
+            animation: bounce 2s infinite ease-in-out;
+        }
+
+        .brick::after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        .brick-y {
+            background: var(--primary);
+            animation-delay: 0s;
+        }
+
+        .brick-r {
+            background: var(--secondary);
+            animation-delay: 0.2s;
+        }
+
+        .brick-b {
+            background: var(--accent);
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            background: linear-gradient(to right, #fff, #ffd500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: var(--primary);
+            color: var(--dark);
+            font-weight: 800;
+            border-radius: 100px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 20px rgba(255, 213, 0, 0.3);
+        }
+
+        .footer-text {
+            margin-top: 3rem;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 300;
+        }
+
+        .biesbi-name {
+            color: var(--primary);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .container {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-overlay"></div>
+
+    <div class="container">
+        <div class="logo-construction">
+            <div class="brick brick-y"></div>
+            <div class="brick brick-r"></div>
+            <div class="brick brick-b"></div>
+        </div>
+
+        <div class="badge">SİSTEM GÜNCELLEMESİ</div>
+
+        <h1 style="color: var(--primary); -webkit-text-fill-color: initial; background: none; margin-bottom: 0.5rem;">
+            BOOMERITEMS</h1>
+        <h2
+            style="font-size: 1.5rem; margin-bottom: 2rem; font-weight: 300; letter-spacing: 2px; color: rgba(255,255,255,0.6);">
+            BAKIM MODU</h2>
+
+        <p style="margin-bottom: 2.5rem;">BiEsBi geliştirici ekibi, sitemizi yeni koleksiyonlar için hazırlıyor. Ancak
+            isterseniz mağazamıza giriş yapabilirsiniz.</p>
+
+        <a href="home.html"
+            style="display: inline-block; padding: 15px 40px; background: var(--primary); color: var(--dark); text-decoration: none; font-weight: 800; border-radius: 12px; font-size: 1.1rem; transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(255,213,0,0.2);"
+            onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 15px 35px rgba(255,213,0,0.3)'"
+            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(255,213,0,0.2)'">
+            MAĞAZAYA GİRİŞ YAP
+        </a>
+
+        <div class="footer-text" style="margin-top: 2.5rem;">
+            Developer: <span class="biesbi-name">BiEsBi</span> | &copy; 2026 BoomerItems
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Çoklu Görsel Yükleme Test</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #0f172a; color: #e2e8f0; padding: 2rem; }
+.container { max-width: 800px; margin: 0 auto; background: #1e293b; padding: 2rem; border-radius: 12px; }
+h1 { color: #38bdf8; margin-bottom: 1.5rem; }
+.form-group { margin: 1.5rem 0; }
+label { display: block; margin-bottom: 0.5rem; color: #94a3b8; font-weight: 600; }
+input, select { width: 100%; padding: 0.75rem; background: #334155; border: 1px solid #475569; border-radius: 6px; color: #e2e8f0; font-size: 14px; }
+button { background: #38bdf8; color: #0f172a; border: none; padding: 1rem 2rem; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 16px; margin-top: 1rem; }
+button:hover { background: #0ea5e9; }
+.preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem; }
+.preview img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; border: 2px solid #475569; }
+.preview .primary { border-color: #fbbf24; box-shadow: 0 0 10px #fbbf24; }
+#output { margin-top: 2rem; padding: 1rem; background: #000; border-radius: 8px; color: #0f0; font-family: monospace; font-size: 12px; max-height: 400px; overflow-y: auto; }
+.log { margin: 0.25rem 0; }
+.log.error { color: #f00; }
+.log.success { color: #0f0; }
+.log.info { color: #0ff; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>📸 Çoklu Görsel Yükleme Test</h1>
+
+  <div class="form-group">
+    <label>Admin Token:</label>
+    <input type="text" id="token" placeholder="Bearer token (otomatik alınacak)">
+    <button onclick="doLogin()">🔐 Login Yap</button>
+  </div>
+
+  <div class="form-group">
+    <label>Ürün Seç:</label>
+    <select id="productSelect" onchange="updateProductId()">
+      <option value="">Önce ürünleri yükleyin...</option>
+    </select>
+    <button onclick="loadProducts()">📦 Ürünleri Yükle</button>
+  </div>
+
+  <div class="form-group">
+    <label>Ürün ID:</label>
+    <input type="text" id="productId" readonly>
+  </div>
+
+  <div class="form-group">
+    <label>Görseller Seç (Çoklu):</label>
+    <input type="file" id="imageFiles" accept="image/*" multiple onchange="previewImages()">
+  </div>
+
+  <div id="preview" class="preview"></div>
+
+  <button onclick="uploadMultipleImages()" style="width: 100%; background: #dc2626; color: white;">
+    🚀 TÜM GÖRSELLERİ YÜKLE
+  </button>
+
+  <div id="output"></div>
+</div>
+
+<script>
+const apiBase = '/api';
+let authToken = '';
+
+function log(msg, type = 'info') {
+  const output = document.getElementById('output');
+  const div = document.createElement('div');
+  div.className = 'log ' + type;
+  div.textContent = msg;
+  output.appendChild(div);
+  output.scrollTop = output.scrollHeight;
+}
+
+async function doLogin() {
+  log('🔐 Login...', 'info');
+  try {
+    const response = await fetch(apiBase + '/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username: 'admin@boomeritems.com',
+        password: 'admin123'
+      })
+    });
+    const data = await response.json();
+    if (response.ok && data.token) {
+      authToken = data.token;
+      document.getElementById('token').value = authToken;
+      log('✅ Login başarılı!', 'success');
+    } else {
+      log('❌ Login başarısız: ' + data.message, 'error');
+    }
+  } catch (error) {
+    log('❌ Hata: ' + error.message, 'error');
+  }
+}
+
+async function loadProducts() {
+  const token = document.getElementById('token').value || authToken;
+  if (!token) {
+    log('⚠️ Önce login yapın!', 'error');
+    return;
+  }
+  log('📦 Ürünler yükleniyor...', 'info');
+  try {
+    const response = await fetch(apiBase + '/products?limit=20', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    const data = await response.json();
+    if (response.ok && Array.isArray(data)) {
+      const select = document.getElementById('productSelect');
+      select.innerHTML = '<option value="">-- Ürün Seçin --</option>';
+      data.forEach(p => {
+        const option = document.createElement('option');
+        option.value = p.id;
+        option.textContent = p.name + ' (ID: ' + p.id + ')';
+        select.appendChild(option);
+      });
+      log('✅ ' + data.length + ' ürün yüklendi', 'success');
+    }
+  } catch (error) {
+    log('❌ Hata: ' + error.message, 'error');
+  }
+}
+
+function updateProductId() {
+  const select = document.getElementById('productSelect');
+  document.getElementById('productId').value = select.value;
+}
+
+function previewImages() {
+  const fileInput = document.getElementById('imageFiles');
+  const preview = document.getElementById('preview');
+  preview.innerHTML = '';
+
+  Array.from(fileInput.files).forEach((file, index) => {
+    const img = document.createElement('img');
+    img.src = URL.createObjectURL(file);
+    if (index === 0) img.className = 'primary';
+    img.title = 'Görsel ' + (index + 1) + (index === 0 ? ' (Kapak)' : '');
+    preview.appendChild(img);
+  });
+
+  log('📸 ' + fileInput.files.length + ' görsel seçildi (İlki kapak olacak)', 'info');
+}
+
+async function uploadMultipleImages() {
+  const token = document.getElementById('token').value || authToken;
+  const productId = document.getElementById('productId').value;
+  const fileInput = document.getElementById('imageFiles');
+
+  if (!token || !productId || !fileInput.files.length) {
+    log('❌ Token, ürün ID ve görseller gerekli!', 'error');
+    return;
+  }
+
+  log('═══════════════════════════════════════', 'info');
+  log('🚀 ÇOKLU GÖRSEL YÜKLEME BAŞLADI', 'info');
+  log('Ürün ID: ' + productId, 'info');
+  log('Toplam Görsel: ' + fileInput.files.length, 'info');
+  log('═══════════════════════════════════════', 'info');
+
+  const files = Array.from(fileInput.files);
+  let successCount = 0;
+  let errorCount = 0;
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const isPrimary = i === 0; // İlk görsel kapak olacak
+
+    log('', 'info');
+    log(`📤 Görsel ${i + 1}/${files.length} yükleniyor...`, 'info');
+    log('Dosya: ' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)', 'info');
+    log('Kapak: ' + (isPrimary ? 'EVET ⭐' : 'Hayır'), 'info');
+
+    const formData = new FormData();
+    formData.append('product_id', productId);
+    formData.append('image', file);
+    formData.append('is_primary', isPrimary ? 'true' : 'false');
+
+    try {
+      const response = await fetch(apiBase + '/upload/product-image', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + token },
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        log('✅ Başarılı! ID: ' + (data.uploaded?.[0]?.id || 'N/A'), 'success');
+        successCount++;
+      } else {
+        log('❌ Hata: ' + data.message, 'error');
+        errorCount++;
+      }
+    } catch (error) {
+      log('❌ Network hatası: ' + error.message, 'error');
+      errorCount++;
+    }
+
+    // Kısa bekleme (rate limiting için)
+    await new Promise(resolve => setTimeout(resolve, 200));
+  }
+
+  log('', 'info');
+  log('═══════════════════════════════════════', 'info');
+  log('SONUÇ:', 'info');
+  log('✅ Başarılı: ' + successCount, 'success');
+  log('❌ Başarısız: ' + errorCount, errorCount > 0 ? 'error' : 'info');
+  log('═══════════════════════════════════════', 'info');
+}
+
+window.addEventListener('load', () => {
+  log('🌟 Test aracı hazır!', 'info');
+  log('1. Login yapın', 'info');
+  log('2. Ürün seçin', 'info');
+  log('3. Birden fazla görsel seçin', 'info');
+  log('4. Yükle butonuna basın', 'info');
+});
+</script>
+</body>
+</html>
