@@ -4867,7 +4867,83 @@
   </script>
 
   <!-- Çoklu Görsel Yükleme Düzeltmesi -->
-  <script src="/simple-multi-image-fix.js"></script>
+  <script>
+    (function() {
+      console.log('🔧 Çoklu görsel düzeltmesi yüklendi');
+
+      function enhanceImageInput() {
+        var imageInputs = document.querySelectorAll('input[type="file"]');
+
+        imageInputs.forEach(function(input) {
+          // Her zaman multiple yap
+          if (!input.multiple) {
+            input.multiple = true;
+            console.log('✅ File input multiple yapıldı:', input);
+          }
+
+          if (input.dataset.multiImageEnhanced) return;
+          input.dataset.multiImageEnhanced = '1';
+
+          var preview = document.createElement('div');
+          preview.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;margin-top:15px;padding:15px;background:#f8fafc;border:2px dashed #cbd5e1;border-radius:8px;';
+
+          var parent = input.parentElement;
+          if (parent) {
+            parent.appendChild(preview);
+            var info = document.createElement('div');
+            info.style.cssText = 'margin-top:8px;font-size:12px;color:#64748b;';
+            info.innerHTML = '💡 <strong>Çoklu seçim yapabilirsiniz!</strong> İlk görsel kapak olacak.';
+            parent.insertBefore(info, preview);
+          }
+
+          input.addEventListener('change', function(e) {
+            var files = Array.from(e.target.files);
+            console.log('📸 ' + files.length + ' görsel seçildi');
+            preview.innerHTML = '';
+
+            if (files.length === 0) {
+              preview.innerHTML = '<div style="padding:20px;text-align:center;color:#94a3b8;">Görsel seçilmedi</div>';
+              return;
+            }
+
+            if (window.adminProductState) {
+              window.adminProductState.pendingUploads = files.map(function(file) {
+                return { file: file, url: URL.createObjectURL(file) };
+              });
+              window.adminProductState.primaryIndex = 0;
+            }
+
+            files.forEach(function(file, index) {
+              var container = document.createElement('div');
+              container.style.cssText = 'position:relative;border:2px solid ' + (index === 0 ? '#fbbf24' : '#e2e8f0') + ';border-radius:8px;overflow:hidden;aspect-ratio:1;box-shadow:' + (index === 0 ? '0 0 10px rgba(251,191,36,0.5)' : 'none');
+              var img = document.createElement('img');
+              img.src = URL.createObjectURL(file);
+              img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
+              var label = document.createElement('div');
+              label.textContent = index === 0 ? '⭐ Kapak' : (index + 1);
+              label.style.cssText = 'position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.8);color:white;padding:4px;text-align:center;font-size:10px;font-weight:bold;';
+              container.appendChild(img);
+              container.appendChild(label);
+              preview.appendChild(container);
+            });
+          });
+        });
+      }
+
+      // Hemen çalıştır
+      enhanceImageInput();
+      setTimeout(enhanceImageInput, 100);
+      setTimeout(enhanceImageInput, 500);
+      setTimeout(enhanceImageInput, 1000);
+
+      // MutationObserver
+      var observer = new MutationObserver(enhanceImageInput);
+      observer.observe(document.body, { childList: true, subtree: true });
+
+      // Çok sık kontrol et
+      setInterval(enhanceImageInput, 500);
+    })();
+  </script>
 </body>
 
 </html>

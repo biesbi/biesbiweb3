@@ -16,7 +16,8 @@
   <meta property="og:locale" content="tr_TR">
   <meta property="og:url" content="https://boomeritems.com/">
   <meta property="og:title" content="BoomerItems | Boomer Items LEGO Setleri ve Koleksiyon Urunleri">
-  <meta property="og:description" content="BoomerItems, Boomer Items aramalarinda guclu gorunurluk icin optimize edilmis LEGO ve koleksiyon magazasidir.">
+  <meta property="og:description"
+    content="BoomerItems, Boomer Items aramalarinda guclu gorunurluk icin optimize edilmis LEGO ve koleksiyon magazasidir.">
   <meta property="og:image" content="https://boomeritems.com/logo_v2_full.png">
   <meta property="og:image:alt" content="BoomerItems logo">
   <meta name="twitter:card" content="summary_large_image">
@@ -51,7 +52,7 @@
         var run = debounce(function () {
           try {
             callback();
-          } catch (error) {}
+          } catch (error) { }
         }, options.wait || 120);
 
         function stop() {
@@ -251,6 +252,7 @@
       pointer-events: none !important;
       cursor: not-allowed !important;
     }
+
     .stock-inline-note {
       display: inline-flex;
       align-items: center;
@@ -264,14 +266,17 @@
       font-weight: 700;
       line-height: 1;
     }
+
     .stock-inline-note.low {
       background: rgba(217, 119, 6, 0.14);
       color: #92400e;
     }
+
     .stock-inline-note.out {
       background: rgba(127, 29, 29, 0.14);
       color: #991b1b;
     }
+
     .cart-qty-controls {
       display: inline-flex;
       align-items: center;
@@ -281,6 +286,7 @@
       border-radius: 999px;
       background: rgba(15, 23, 42, 0.06);
     }
+
     .cart-qty-btn {
       width: 28px;
       height: 28px;
@@ -293,10 +299,12 @@
       line-height: 1;
       cursor: pointer;
     }
+
     .cart-qty-btn[disabled] {
       opacity: 0.35;
       cursor: not-allowed;
     }
+
     .cart-qty-value {
       min-width: 22px;
       text-align: center;
@@ -314,19 +322,29 @@
       position: relative;
       overflow: hidden;
     }
+
     .modern-footer::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0;
+      top: 0;
+      left: 0;
+      right: 0;
       height: 3px;
       background: linear-gradient(90deg, #dd101f, #ff6b35, #ffcc00, #dd101f);
       background-size: 200% 100%;
       animation: footerBorderAnim 4s linear infinite;
     }
+
     @keyframes footerBorderAnim {
-      0%   { background-position: 0% 0; }
-      100% { background-position: 200% 0; }
+      0% {
+        background-position: 0% 0;
+      }
+
+      100% {
+        background-position: 200% 0;
+      }
     }
+
     .footer-content {
       max-width: 1200px !important;
       margin: 0 auto !important;
@@ -336,17 +354,20 @@
       gap: 48px !important;
       align-items: start !important;
     }
+
     .footer-brand {
       display: flex !important;
       flex-direction: column !important;
       gap: 16px !important;
     }
+
     .footer-brand .logo-img-footer,
     .footer-brand img {
       max-width: 180px !important;
       height: auto !important;
-      filter: drop-shadow(0 0 24px rgba(255,255,255,0.6)) drop-shadow(0 0 8px rgba(255,255,255,0.9)) !important;
+      filter: drop-shadow(0 0 24px rgba(255, 255, 255, 0.6)) drop-shadow(0 0 8px rgba(255, 255, 255, 0.9)) !important;
     }
+
     .footer-brand p {
       color: #ffcc00 !important;
       font-size: 14px !important;
@@ -354,6 +375,7 @@
       margin: 0 !important;
       max-width: 280px;
     }
+
     .footer-brand .social-links,
     .social-links {
       display: flex !important;
@@ -361,14 +383,15 @@
       margin-top: 8px !important;
       flex-wrap: wrap;
     }
+
     .social-links a {
       display: inline-flex !important;
       align-items: center !important;
       gap: 6px !important;
       padding: 8px 16px !important;
       border-radius: 999px !important;
-      background: rgba(255,255,255,0.08) !important;
-      border: 1px solid rgba(255,255,255,0.2) !important;
+      background: rgba(255, 255, 255, 0.08) !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
       color: #ffcc00 !important;
       font-size: 12px !important;
       font-weight: 700 !important;
@@ -376,21 +399,25 @@
       text-decoration: none !important;
       transition: all 0.2s !important;
     }
+
     .social-links a:hover {
       background: #dd101f !important;
       border-color: #dd101f !important;
       color: #fff !important;
       transform: translateY(-2px) !important;
     }
+
     .footer-links {
       display: flex !important;
       gap: 40px !important;
     }
-    .footer-links > div {
+
+    .footer-links>div {
       display: flex !important;
       flex-direction: column !important;
       gap: 12px !important;
     }
+
     .footer-links h5,
     .footer-contact h5 {
       color: #ffcc00 !important;
@@ -400,8 +427,9 @@
       text-transform: uppercase !important;
       margin: 0 0 4px !important;
       padding-bottom: 8px !important;
-      border-bottom: 1px solid rgba(255,255,255,0.15) !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
     }
+
     .footer-links ul {
       list-style: none !important;
       padding: 0 !important;
@@ -410,6 +438,7 @@
       flex-direction: column !important;
       gap: 10px !important;
     }
+
     .footer-links ul li a {
       color: #ffcc00 !important;
       text-decoration: none !important;
@@ -419,20 +448,24 @@
       align-items: center !important;
       gap: 6px !important;
     }
+
     .footer-links ul li a::before {
       content: '›' !important;
       color: #dd101f !important;
       font-size: 16px !important;
       line-height: 1 !important;
     }
+
     .footer-links ul li a:hover {
       color: #dd101f !important;
     }
+
     .footer-contact {
       display: flex !important;
       flex-direction: column !important;
       gap: 12px !important;
     }
+
     .footer-contact p {
       color: #ffcc00 !important;
       font-size: 14px !important;
@@ -442,48 +475,79 @@
       align-items: flex-start !important;
       gap: 10px !important;
     }
-    .footer-contact p:nth-child(2)::before { content: '✉' !important; color: #dd101f !important; flex-shrink: 0; }
-    .footer-contact p:nth-child(3)::before { content: '📞' !important; flex-shrink: 0; }
-    .footer-contact p:nth-child(4)::before { content: '📍' !important; flex-shrink: 0; }
+
+    .footer-contact p:nth-child(2)::before {
+      content: '✉' !important;
+      color: #dd101f !important;
+      flex-shrink: 0;
+    }
+
+    .footer-contact p:nth-child(3)::before {
+      content: '📞' !important;
+      flex-shrink: 0;
+    }
+
+    .footer-contact p:nth-child(4)::before {
+      content: '📍' !important;
+      flex-shrink: 0;
+    }
+
     .footer-bottom {
       max-width: 1200px !important;
       margin: 48px auto 0 !important;
       padding: 20px 32px !important;
-      border-top: 1px solid rgba(255,255,255,0.15) !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
     }
+
     .footer-bottom p {
       color: #ffffff !important;
       font-size: 13px !important;
       margin: 0 !important;
       text-align: center !important;
     }
+
     .footer-bottom a {
       color: #ffffff !important;
       text-decoration: underline !important;
       transition: color 0.2s !important;
     }
-    .footer-bottom a:hover { color: #dd101f !important; }
+
+    .footer-bottom a:hover {
+      color: #dd101f !important;
+    }
 
     @media (max-width: 900px) {
       .footer-content {
         grid-template-columns: 1fr 1fr !important;
         gap: 36px !important;
       }
-      .footer-brand { grid-column: 1 / -1 !important; }
+
+      .footer-brand {
+        grid-column: 1 / -1 !important;
+      }
     }
+
     @media (max-width: 580px) {
       .footer-content {
         grid-template-columns: 1fr !important;
         padding: 0 20px !important;
       }
-      .footer-links { flex-direction: column !important; gap: 28px !important; }
-      .modern-footer { padding: 48px 0 0 !important; }
+
+      .footer-links {
+        flex-direction: column !important;
+        gap: 28px !important;
+      }
+
+      .modern-footer {
+        padding: 48px 0 0 !important;
+      }
     }
 
     @media (max-width: 768px) {
+
       .modern-header,
       .modern-header.scrolled {
         padding: 8px 14px !important;
@@ -618,7 +682,7 @@
         }
       }
 
-	      function withAuthHeader(input, init) {
+      function withAuthHeader(input, init) {
         var token = getStoredToken();
         if (!token) {
           return { input: input, init: init };
@@ -646,72 +710,72 @@
         if (!headers.has('Authorization')) {
           headers.set('Authorization', 'Bearer ' + token);
         }
-	        nextInit.headers = headers;
-	        return { input: input, init: nextInit };
-	      }
+        nextInit.headers = headers;
+        return { input: input, init: nextInit };
+      }
 
-	      function normalizeCartStockValue(value) {
-	        return String(value || '')
-	          .toLocaleLowerCase('tr-TR')
-	          .replace(/\s+/g, ' ')
-	          .trim();
-	      }
+      function normalizeCartStockValue(value) {
+        return String(value || '')
+          .toLocaleLowerCase('tr-TR')
+          .replace(/\s+/g, ' ')
+          .trim();
+      }
 
-	      function clampCartItemsPayload(value) {
-	        if (typeof value !== 'string') {
-	          return value;
-	        }
+      function clampCartItemsPayload(value) {
+        if (typeof value !== 'string') {
+          return value;
+        }
 
-	        var stockState = window.__boomerStockState || { byId: {}, byName: {} };
-	        var parsed;
-	        try {
-	          parsed = JSON.parse(value);
-	        } catch (error) {
-	          return value;
-	        }
+        var stockState = window.__boomerStockState || { byId: {}, byName: {} };
+        var parsed;
+        try {
+          parsed = JSON.parse(value);
+        } catch (error) {
+          return value;
+        }
 
-	        if (!Array.isArray(parsed)) {
-	          return value;
-	        }
+        if (!Array.isArray(parsed)) {
+          return value;
+        }
 
-	        var clamped = parsed.map(function (item) {
-	          var stockInfo = stockState.byId[String(item.id || '')]
-	            || stockState.byName[normalizeCartStockValue(item.title || item.name || '')]
-	            || null;
+        var clamped = parsed.map(function (item) {
+          var stockInfo = stockState.byId[String(item.id || '')]
+            || stockState.byName[normalizeCartStockValue(item.title || item.name || '')]
+            || null;
 
-	          if (!stockInfo) {
-	            return item;
-	          }
+          if (!stockInfo) {
+            return item;
+          }
 
-	          var availableQty = Math.max(0, Number(stockInfo.stock || 0));
-	          if (!stockInfo.isActive || !stockInfo.inStock || availableQty <= 0) {
-	            return null;
-	          }
+          var availableQty = Math.max(0, Number(stockInfo.stock || 0));
+          if (!stockInfo.isActive || !stockInfo.inStock || availableQty <= 0) {
+            return null;
+          }
 
-	          var currentQty = Math.max(1, Number(item.qty || item.quantity || 1));
-	          var nextQty = Math.min(currentQty, availableQty);
+          var currentQty = Math.max(1, Number(item.qty || item.quantity || 1));
+          var nextQty = Math.min(currentQty, availableQty);
 
-	          return Object.assign({}, item, {
-	            qty: nextQty,
-	            quantity: nextQty
-	          });
-	        }).filter(Boolean);
+          return Object.assign({}, item, {
+            qty: nextQty,
+            quantity: nextQty
+          });
+        }).filter(Boolean);
 
-	        return JSON.stringify(clamped);
-	      }
+        return JSON.stringify(clamped);
+      }
 
-	      if (!window.__cartStorageClampInstalled) {
-	        window.__cartStorageClampInstalled = true;
-	        var originalSetItem = localStorage.setItem.bind(localStorage);
-	        localStorage.setItem = function (key, value) {
-	          if (key === 'cartItems') {
-	            value = clampCartItemsPayload(value);
-	          }
-	          return originalSetItem(key, value);
-	        };
-	      }
+      if (!window.__cartStorageClampInstalled) {
+        window.__cartStorageClampInstalled = true;
+        var originalSetItem = localStorage.setItem.bind(localStorage);
+        localStorage.setItem = function (key, value) {
+          if (key === 'cartItems') {
+            value = clampCartItemsPayload(value);
+          }
+          return originalSetItem(key, value);
+        };
+      }
 
-	      function closePaytrOverlay() {
+      function closePaytrOverlay() {
         if (paytrOverlay) {
           paytrOverlay.remove();
           paytrOverlay = null;
@@ -862,7 +926,7 @@
         ['İl (�?ehir)', 'İl (Şehir)'],
         ['BoomerItems Dış Tic. Ltd. �?ti.', 'BoomerItems Dış Tic. Ltd. Şti.'],
         ['�️ Kupon İndirimi', 'Kupon İndirimi'],
-        ['g�?� Hediye Paketi İstiyorum (+25 ₺)', 'Hediye Paketi İstiyorum (+25 ₺)'],
+        [' Hediye Paketi İstiyorum (+25 ₺)', 'Hediye Paketi İstiyorum (+25 ₺)'],
         ['g�?� Hediye Paketi', 'Hediye Paketi'],
         ['g��� 256-bit SSL Güvencesiyle', '256-bit SSL Güvencesiyle'],
         ['g��� Hatalı şifre veya e-posta. Lütfen kontrol edin.', 'Hatalı şifre veya e-posta. Lütfen kontrol edin.'],
@@ -1350,28 +1414,28 @@
         return button;
       }
 
-	      function getSelectedPaymentMethod(form) {
-	        var checked = form.querySelector('input[name="payment"]:checked');
-	        return checked ? checked.value : 'card';
-	      }
+      function getSelectedPaymentMethod(form) {
+        var checked = form.querySelector('input[name="payment"]:checked');
+        return checked ? checked.value : 'card';
+      }
 
-	      function closeCheckoutSurfaces() {
-	        Array.prototype.forEach.call(document.querySelectorAll('.checkout-modal-backdrop, .checkout-modal-container'), function (node) {
-	          node.remove();
-	        });
-	        document.body.style.overflow = '';
-	        document.documentElement.style.overflow = '';
-	      }
+      function closeCheckoutSurfaces() {
+        Array.prototype.forEach.call(document.querySelectorAll('.checkout-modal-backdrop, .checkout-modal-container'), function (node) {
+          node.remove();
+        });
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+      }
 
-	      function createSuccessOverlay(orderId, message) {
-	        var existing = document.getElementById('manual-order-success');
-	        if (existing) {
-	          existing.remove();
-	        }
-	        closeCheckoutSurfaces();
+      function createSuccessOverlay(orderId, message) {
+        var existing = document.getElementById('manual-order-success');
+        if (existing) {
+          existing.remove();
+        }
+        closeCheckoutSurfaces();
 
-	        var overlay = document.createElement('div');
-	        overlay.id = 'manual-order-success';
+        var overlay = document.createElement('div');
+        overlay.id = 'manual-order-success';
         overlay.style.position = 'fixed';
         overlay.style.inset = '0';
         overlay.style.background = 'rgba(15,23,42,0.72)';
@@ -1474,27 +1538,27 @@
         document.body.appendChild(overlay);
       }
 
-	      function buildOrderPayload(form) {
-	        var cartItems = parseCartItems();
-	        if (!cartItems.length) {
-	          throw new Error('Sepetiniz bos.');
-	        }
+      function buildOrderPayload(form) {
+        var cartItems = parseCartItems();
+        if (!cartItems.length) {
+          throw new Error('Sepetiniz bos.');
+        }
 
-	        var stockState = window.__boomerStockState || { byId: {}, byName: {} };
-	        var adjustedItems = [];
-	        var changedItems = [];
-	        function normalizeStockKey(value) {
-	          return String(value || '')
-	            .toLocaleLowerCase('tr-TR')
-	            .replace(/\s+/g, ' ')
-	            .trim();
-	        }
+        var stockState = window.__boomerStockState || { byId: {}, byName: {} };
+        var adjustedItems = [];
+        var changedItems = [];
+        function normalizeStockKey(value) {
+          return String(value || '')
+            .toLocaleLowerCase('tr-TR')
+            .replace(/\s+/g, ' ')
+            .trim();
+        }
 
-	        cartItems.forEach(function (item) {
-	          var requestedQty = Number(item.qty || item.quantity || 1);
-	          var stockInfo = stockState.byId[String(item.id || '')] || stockState.byName[normalizeStockKey(item.title || item.name || '')] || null;
-	          var availableQty = stockInfo ? Number(stockInfo.stock || 0) : null;
-	          var finalQty = requestedQty;
+        cartItems.forEach(function (item) {
+          var requestedQty = Number(item.qty || item.quantity || 1);
+          var stockInfo = stockState.byId[String(item.id || '')] || stockState.byName[normalizeStockKey(item.title || item.name || '')] || null;
+          var availableQty = stockInfo ? Number(stockInfo.stock || 0) : null;
+          var finalQty = requestedQty;
 
           if (availableQty !== null) {
             if (availableQty <= 0) {
@@ -1664,65 +1728,65 @@
     })();
   </script>
   <script>
-	    (function () {
-	      var apiBase = window.location.origin + '/api';
-	      var stockByName = {};
-	      var stockById = {};
+    (function () {
+      var apiBase = window.location.origin + '/api';
+      var stockByName = {};
+      var stockById = {};
 
-	      function normalize(value) {
-	        return String(value || '')
-	          .toLocaleLowerCase('tr-TR')
-	          .replace(/\s+/g, ' ')
-	          .trim();
-	      }
+      function normalize(value) {
+        return String(value || '')
+          .toLocaleLowerCase('tr-TR')
+          .replace(/\s+/g, ' ')
+          .trim();
+      }
 
-	      function stockText(stockInfo) {
-	        if (!stockInfo || !stockInfo.isActive || stockInfo.stock <= 0 || !stockInfo.inStock) {
-	          return 'Stokta yok';
-	        }
-	        return 'Stokta ' + stockInfo.stock + ' adet';
-	      }
+      function stockText(stockInfo) {
+        if (!stockInfo || !stockInfo.isActive || stockInfo.stock <= 0 || !stockInfo.inStock) {
+          return 'Stokta yok';
+        }
+        return 'Stokta ' + stockInfo.stock + ' adet';
+      }
 
-	      function stockClass(stockInfo) {
-	        if (!stockInfo || !stockInfo.isActive || stockInfo.stock <= 0 || !stockInfo.inStock) {
-	          return 'stock-inline-note out';
-	        }
-	        if (stockInfo.stock <= 3) {
-	          return 'stock-inline-note low';
-	        }
-	        return 'stock-inline-note';
-	      }
+      function stockClass(stockInfo) {
+        if (!stockInfo || !stockInfo.isActive || stockInfo.stock <= 0 || !stockInfo.inStock) {
+          return 'stock-inline-note out';
+        }
+        if (stockInfo.stock <= 3) {
+          return 'stock-inline-note low';
+        }
+        return 'stock-inline-note';
+      }
 
-	      function loadStockMap() {
-	        return window.__boomerPerf.fetchJsonOnce('products-summary', apiBase + '/products?summary=1').then(function (products) {
-	          var list = Array.isArray(products) ? products : [];
-	          stockByName = {};
-	          stockById = {};
-	          list.forEach(function (product) {
-	            var mapped = {
-	              stock: Number(product.stock || 0),
-	              inStock: !!product.in_stock,
-	              isActive: product.isActive !== false && product.is_active !== 0
-	            };
-	            stockByName[normalize(product.name || product.title)] = mapped;
-	            stockById[String(product.id || '')] = mapped;
-	          });
-	          window.__boomerStockState = {
-	            byName: stockByName,
-	            byId: stockById
-	          };
-	          syncStoredCart();
-	          decorateCards();
-	          decorateCartAndSummary();
-	        }).catch(function () { });
-	      }
+      function loadStockMap() {
+        return window.__boomerPerf.fetchJsonOnce('products-summary', apiBase + '/products?summary=1').then(function (products) {
+          var list = Array.isArray(products) ? products : [];
+          stockByName = {};
+          stockById = {};
+          list.forEach(function (product) {
+            var mapped = {
+              stock: Number(product.stock || 0),
+              inStock: !!product.in_stock,
+              isActive: product.isActive !== false && product.is_active !== 0
+            };
+            stockByName[normalize(product.name || product.title)] = mapped;
+            stockById[String(product.id || '')] = mapped;
+          });
+          window.__boomerStockState = {
+            byName: stockByName,
+            byId: stockById
+          };
+          syncStoredCart();
+          decorateCards();
+          decorateCartAndSummary();
+        }).catch(function () { });
+      }
 
       function findCardTitle(card) {
         var titleNode = card.querySelector('h1, h2, h3, h4, h5, [data-product-title], .product-title');
         return titleNode ? normalize(titleNode.textContent) : '';
       }
 
-	      function ensureBadge(card) {
+      function ensureBadge(card) {
         var badge = card.querySelector('.stock-badge-out');
         if (badge) {
           return badge;
@@ -1736,72 +1800,72 @@
         badge.style.left = '12px';
         card.appendChild(badge);
         return badge;
-	      }
+      }
 
-	      function ensureInlineNote(container, stockInfo) {
-	        if (!container) {
-	          return;
-	        }
-	        var note = container.querySelector('.stock-inline-note');
-	        if (!note) {
-	          note = document.createElement('div');
-	          note.className = 'stock-inline-note';
-	          container.appendChild(note);
-	        }
-	        note.className = stockClass(stockInfo);
-	        note.textContent = stockText(stockInfo);
-	      }
+      function ensureInlineNote(container, stockInfo) {
+        if (!container) {
+          return;
+        }
+        var note = container.querySelector('.stock-inline-note');
+        if (!note) {
+          note = document.createElement('div');
+          note.className = 'stock-inline-note';
+          container.appendChild(note);
+        }
+        note.className = stockClass(stockInfo);
+        note.textContent = stockText(stockInfo);
+      }
 
-	      function lookupStockInfo(id, title) {
-	        return stockById[String(id || '')] || stockByName[normalize(title)] || null;
-	      }
+      function lookupStockInfo(id, title) {
+        return stockById[String(id || '')] || stockByName[normalize(title)] || null;
+      }
 
-	      function syncStoredCart() {
-	        var raw;
-	        try {
-	          raw = JSON.parse(localStorage.getItem('cartItems') || '[]');
-	        } catch (error) {
-	          raw = [];
-	        }
-	        if (!Array.isArray(raw) || !raw.length) {
-	          return;
-	        }
+      function syncStoredCart() {
+        var raw;
+        try {
+          raw = JSON.parse(localStorage.getItem('cartItems') || '[]');
+        } catch (error) {
+          raw = [];
+        }
+        if (!Array.isArray(raw) || !raw.length) {
+          return;
+        }
 
-	        var changed = false;
-	        var filtered = raw.map(function (item) {
-	          var stockInfo = lookupStockInfo(item.id, item.title || item.name || '');
-	          if (!stockInfo) {
-	            return item;
-	          }
+        var changed = false;
+        var filtered = raw.map(function (item) {
+          var stockInfo = lookupStockInfo(item.id, item.title || item.name || '');
+          if (!stockInfo) {
+            return item;
+          }
 
-	          var availableQty = Math.max(0, Number(stockInfo.stock || 0));
-	          var currentQty = Math.max(1, Number(item.qty || item.quantity || 1));
-	          var nextQty = Math.min(currentQty, availableQty || currentQty);
+          var availableQty = Math.max(0, Number(stockInfo.stock || 0));
+          var currentQty = Math.max(1, Number(item.qty || item.quantity || 1));
+          var nextQty = Math.min(currentQty, availableQty || currentQty);
 
-	          if (!stockInfo.isActive || !stockInfo.inStock || availableQty <= 0) {
-	            changed = true;
-	            return null;
-	          }
+          if (!stockInfo.isActive || !stockInfo.inStock || availableQty <= 0) {
+            changed = true;
+            return null;
+          }
 
-	          if (nextQty !== currentQty) {
-	            changed = true;
-	            return Object.assign({}, item, {
-	              qty: nextQty,
-	              quantity: nextQty
-	            });
-	          }
+          if (nextQty !== currentQty) {
+            changed = true;
+            return Object.assign({}, item, {
+              qty: nextQty,
+              quantity: nextQty
+            });
+          }
 
-	          return item;
-	        }).filter(Boolean);
+          return item;
+        }).filter(Boolean);
 
-	        if (changed) {
-	          localStorage.setItem('cartItems', JSON.stringify(filtered));
-	        }
-	      }
+        if (changed) {
+          localStorage.setItem('cartItems', JSON.stringify(filtered));
+        }
+      }
 
-	      function decorateCards() {
-	        var cards = document.querySelectorAll('article, .product-card, .card, .product-item');
-	        Array.prototype.forEach.call(cards, function (card) {
+      function decorateCards() {
+        var cards = document.querySelectorAll('article, .product-card, .card, .product-item');
+        Array.prototype.forEach.call(cards, function (card) {
           var name = findCardTitle(card);
           if (!name || !stockByName[name]) {
             return;
@@ -1817,227 +1881,227 @@
             }
           );
 
-	          if (!isOut) {
-	            var infoContainer = card.querySelector('.product-info, .admin-product-cell, .summary-item-info') || card;
-	            ensureInlineNote(infoContainer, stockInfo);
-	            return;
-	          }
+          if (!isOut) {
+            var infoContainer = card.querySelector('.product-info, .admin-product-cell, .summary-item-info') || card;
+            ensureInlineNote(infoContainer, stockInfo);
+            return;
+          }
 
-	          card.classList.add('stock-card-out');
-	          ensureBadge(card);
-	          ensureInlineNote(card.querySelector('.product-info, .admin-product-cell, .summary-item-info') || card, stockInfo);
+          card.classList.add('stock-card-out');
+          ensureBadge(card);
+          ensureInlineNote(card.querySelector('.product-info, .admin-product-cell, .summary-item-info') || card, stockInfo);
 
-	          if (button) {
+          if (button) {
             button.classList.add('stock-disabled-btn');
             if (button.tagName === 'BUTTON') {
               button.disabled = true;
             }
             button.textContent = 'Tukendi';
-	          }
-	        });
-	      }
+          }
+        });
+      }
 
-	      function getCartQuantityForTitle(title) {
-	        var raw;
-	        try {
-	          raw = JSON.parse(localStorage.getItem('cartItems') || '[]');
-	        } catch (error) {
-	          raw = [];
-	        }
+      function getCartQuantityForTitle(title) {
+        var raw;
+        try {
+          raw = JSON.parse(localStorage.getItem('cartItems') || '[]');
+        } catch (error) {
+          raw = [];
+        }
 
-	        if (!Array.isArray(raw)) {
-	          return 0;
-	        }
+        if (!Array.isArray(raw)) {
+          return 0;
+        }
 
-	        var normalizedTitle = normalize(title);
-	        return raw.reduce(function (sum, item) {
-	          if (normalize(item.title || item.name || '') !== normalizedTitle) {
-	            return sum;
-	          }
-	          return sum + Math.max(0, Number(item.qty || item.quantity || 0));
-	        }, 0);
-	      }
+        var normalizedTitle = normalize(title);
+        return raw.reduce(function (sum, item) {
+          if (normalize(item.title || item.name || '') !== normalizedTitle) {
+            return sum;
+          }
+          return sum + Math.max(0, Number(item.qty || item.quantity || 0));
+        }, 0);
+      }
 
-	      function preventOverAdd(event) {
-	        var button = event.target.closest('button, a');
-	        if (!button) {
-	          return;
-	        }
+      function preventOverAdd(event) {
+        var button = event.target.closest('button, a');
+        if (!button) {
+          return;
+        }
 
-	        var text = normalize(button.textContent);
-	        if (text.indexOf('sepete ekle') === -1) {
-	          return;
-	        }
+        var text = normalize(button.textContent);
+        if (text.indexOf('sepete ekle') === -1) {
+          return;
+        }
 
-	        var card = button.closest('article, .product-card, .card, .product-item');
-	        if (!card) {
-	          return;
-	        }
+        var card = button.closest('article, .product-card, .card, .product-item');
+        if (!card) {
+          return;
+        }
 
-	        var titleNode = card.querySelector('h1, h2, h3, h4, h5, [data-product-title], .product-title');
-	        var title = titleNode ? titleNode.textContent : '';
-	        var stockInfo = lookupStockInfo('', title);
-	        if (!stockInfo) {
-	          return;
-	        }
+        var titleNode = card.querySelector('h1, h2, h3, h4, h5, [data-product-title], .product-title');
+        var title = titleNode ? titleNode.textContent : '';
+        var stockInfo = lookupStockInfo('', title);
+        if (!stockInfo) {
+          return;
+        }
 
-	        var cartQty = getCartQuantityForTitle(title);
-	        if (!stockInfo.isActive || !stockInfo.inStock || stockInfo.stock <= 0) {
-	          event.preventDefault();
-	          event.stopImmediatePropagation();
-	          alert('Bu urun stokta yok.');
-	          return;
-	        }
+        var cartQty = getCartQuantityForTitle(title);
+        if (!stockInfo.isActive || !stockInfo.inStock || stockInfo.stock <= 0) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          alert('Bu urun stokta yok.');
+          return;
+        }
 
-	        if (cartQty >= stockInfo.stock) {
-	          event.preventDefault();
-	          event.stopImmediatePropagation();
-	          alert("Bu urunden en fazla " + stockInfo.stock + " adet ekleyebilirsiniz.");
-	        }
-	      }
+        if (cartQty >= stockInfo.stock) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          alert("Bu urunden en fazla " + stockInfo.stock + " adet ekleyebilirsiniz.");
+        }
+      }
 
-	      function decorateCartAndSummary() {
-	        var items = document.querySelectorAll('.cart-item, .summary-item');
-	        Array.prototype.forEach.call(items, function (itemNode) {
-	          var titleNode = itemNode.querySelector('h1, h2, h3, h4, h5, .summary-item-title');
-	          var title = titleNode ? titleNode.textContent : '';
-	          var stockInfo = lookupStockInfo('', title);
-	          if (!stockInfo) {
-	            return;
-	          }
-	          var infoContainer = itemNode.querySelector('.cart-item-info, .summary-item-info') || itemNode;
-	          ensureInlineNote(infoContainer, stockInfo);
-	        });
-	      }
+      function decorateCartAndSummary() {
+        var items = document.querySelectorAll('.cart-item, .summary-item');
+        Array.prototype.forEach.call(items, function (itemNode) {
+          var titleNode = itemNode.querySelector('h1, h2, h3, h4, h5, .summary-item-title');
+          var title = titleNode ? titleNode.textContent : '';
+          var stockInfo = lookupStockInfo('', title);
+          if (!stockInfo) {
+            return;
+          }
+          var infoContainer = itemNode.querySelector('.cart-item-info, .summary-item-info') || itemNode;
+          ensureInlineNote(infoContainer, stockInfo);
+        });
+      }
 
-	      function updateStoredCartQuantity(title, nextQty) {
-	        var raw;
-	        try {
-	          raw = JSON.parse(localStorage.getItem('cartItems') || '[]');
-	        } catch (error) {
-	          raw = [];
-	        }
+      function updateStoredCartQuantity(title, nextQty) {
+        var raw;
+        try {
+          raw = JSON.parse(localStorage.getItem('cartItems') || '[]');
+        } catch (error) {
+          raw = [];
+        }
 
-	        if (!Array.isArray(raw) || !raw.length) {
-	          return;
-	        }
+        if (!Array.isArray(raw) || !raw.length) {
+          return;
+        }
 
-	        var normalizedTitle = normalize(title);
-	        var updated = raw.map(function (item) {
-	          if (normalize(item.title || item.name || '') !== normalizedTitle) {
-	            return item;
-	          }
-	          return Object.assign({}, item, {
-	            qty: nextQty,
-	            quantity: nextQty
-	          });
-	        }).filter(function (item) {
-	          return Number(item.qty || item.quantity || 0) > 0;
-	        });
+        var normalizedTitle = normalize(title);
+        var updated = raw.map(function (item) {
+          if (normalize(item.title || item.name || '') !== normalizedTitle) {
+            return item;
+          }
+          return Object.assign({}, item, {
+            qty: nextQty,
+            quantity: nextQty
+          });
+        }).filter(function (item) {
+          return Number(item.qty || item.quantity || 0) > 0;
+        });
 
-	        localStorage.setItem('cartItems', JSON.stringify(updated));
-	      }
+        localStorage.setItem('cartItems', JSON.stringify(updated));
+      }
 
-	      function ensureCartQuantityControls() {
-	        var cartItems = document.querySelectorAll('.cart-item');
-	        Array.prototype.forEach.call(cartItems, function (itemNode) {
-	          var infoContainer = itemNode.querySelector('.cart-item-info');
-	          var titleNode = itemNode.querySelector('h1, h2, h3, h4, h5');
-	          var qtyTextNode = Array.prototype.find.call(infoContainer ? infoContainer.querySelectorAll('span, p, div') : [], function (node) {
-	            return normalize(node.textContent).indexOf('adet:') === 0;
-	          });
+      function ensureCartQuantityControls() {
+        var cartItems = document.querySelectorAll('.cart-item');
+        Array.prototype.forEach.call(cartItems, function (itemNode) {
+          var infoContainer = itemNode.querySelector('.cart-item-info');
+          var titleNode = itemNode.querySelector('h1, h2, h3, h4, h5');
+          var qtyTextNode = Array.prototype.find.call(infoContainer ? infoContainer.querySelectorAll('span, p, div') : [], function (node) {
+            return normalize(node.textContent).indexOf('adet:') === 0;
+          });
 
-	          if (!infoContainer || !titleNode || !qtyTextNode) {
-	            return;
-	          }
+          if (!infoContainer || !titleNode || !qtyTextNode) {
+            return;
+          }
 
-	          var stockInfo = lookupStockInfo('', titleNode.textContent);
-	          if (!stockInfo || !stockInfo.isActive || stockInfo.stock <= 0) {
-	            return;
-	          }
+          var stockInfo = lookupStockInfo('', titleNode.textContent);
+          if (!stockInfo || !stockInfo.isActive || stockInfo.stock <= 0) {
+            return;
+          }
 
-	          var match = String(qtyTextNode.textContent || '').match(/(\d+)/);
-	          var currentQty = match ? Number(match[1]) : 1;
-	          var maxQty = Math.max(1, Number(stockInfo.stock || 1));
-	          var controls = infoContainer.querySelector('.cart-qty-controls');
+          var match = String(qtyTextNode.textContent || '').match(/(\d+)/);
+          var currentQty = match ? Number(match[1]) : 1;
+          var maxQty = Math.max(1, Number(stockInfo.stock || 1));
+          var controls = infoContainer.querySelector('.cart-qty-controls');
 
-	          qtyTextNode.textContent = 'Adet: ' + currentQty;
+          qtyTextNode.textContent = 'Adet: ' + currentQty;
 
-	          if (!controls) {
-	            controls = document.createElement('div');
-	            controls.className = 'cart-qty-controls';
-	            controls.innerHTML =
-	              '<button type="button" class="cart-qty-btn cart-qty-minus">-</button>' +
-	              '<span class="cart-qty-value"></span>' +
-	              '<button type="button" class="cart-qty-btn cart-qty-plus">+</button>';
-	            qtyTextNode.insertAdjacentElement('afterend', controls);
-	          }
+          if (!controls) {
+            controls = document.createElement('div');
+            controls.className = 'cart-qty-controls';
+            controls.innerHTML =
+              '<button type="button" class="cart-qty-btn cart-qty-minus">-</button>' +
+              '<span class="cart-qty-value"></span>' +
+              '<button type="button" class="cart-qty-btn cart-qty-plus">+</button>';
+            qtyTextNode.insertAdjacentElement('afterend', controls);
+          }
 
-	          var minus = controls.querySelector('.cart-qty-minus');
-	          var plus = controls.querySelector('.cart-qty-plus');
-	          var value = controls.querySelector('.cart-qty-value');
+          var minus = controls.querySelector('.cart-qty-minus');
+          var plus = controls.querySelector('.cart-qty-plus');
+          var value = controls.querySelector('.cart-qty-value');
 
-	          value.textContent = String(currentQty);
-	          minus.disabled = currentQty <= 1;
-	          plus.disabled = currentQty >= maxQty;
+          value.textContent = String(currentQty);
+          minus.disabled = currentQty <= 1;
+          plus.disabled = currentQty >= maxQty;
 
-	          if (controls.dataset.bound !== '1') {
-	            controls.dataset.bound = '1';
+          if (controls.dataset.bound !== '1') {
+            controls.dataset.bound = '1';
 
-	            controls.addEventListener('click', function (event) {
-	              var button = event.target.closest('.cart-qty-btn');
-	              if (!button) {
-	                return;
-	              }
+            controls.addEventListener('click', function (event) {
+              var button = event.target.closest('.cart-qty-btn');
+              if (!button) {
+                return;
+              }
 
-	              var latestMatch = String(qtyTextNode.textContent || '').match(/(\d+)/);
-	              var latestQty = latestMatch ? Number(latestMatch[1]) : 1;
-	              var nextQty = button.classList.contains('cart-qty-plus') ? latestQty + 1 : latestQty - 1;
-	              nextQty = Math.max(1, Math.min(maxQty, nextQty));
+              var latestMatch = String(qtyTextNode.textContent || '').match(/(\d+)/);
+              var latestQty = latestMatch ? Number(latestMatch[1]) : 1;
+              var nextQty = button.classList.contains('cart-qty-plus') ? latestQty + 1 : latestQty - 1;
+              nextQty = Math.max(1, Math.min(maxQty, nextQty));
 
-	              if (nextQty === latestQty) {
-	                return;
-	              }
+              if (nextQty === latestQty) {
+                return;
+              }
 
-	              qtyTextNode.textContent = 'Adet: ' + nextQty;
-	              value.textContent = String(nextQty);
-	              minus.disabled = nextQty <= 1;
-	              plus.disabled = nextQty >= maxQty;
-	              updateStoredCartQuantity(titleNode.textContent, nextQty);
+              qtyTextNode.textContent = 'Adet: ' + nextQty;
+              value.textContent = String(nextQty);
+              minus.disabled = nextQty <= 1;
+              plus.disabled = nextQty >= maxQty;
+              updateStoredCartQuantity(titleNode.textContent, nextQty);
 
-	              var priceNode = itemNode.querySelector('.cart-item-info p');
-	              var priceText = priceNode ? priceNode.textContent : '';
-	              var numericPrice = Number(String(priceText).replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(',', '.'));
-	              if (!isNaN(numericPrice) && numericPrice > 0) {
-	                var totals = document.querySelectorAll('.cart-total span:last-child');
-	                Array.prototype.forEach.call(totals, function (totalNode) {
-	                  var raw;
-	                  try {
-	                    raw = JSON.parse(localStorage.getItem('cartItems') || '[]');
-	                  } catch (error) {
-	                    raw = [];
-	                  }
-	                  var total = (Array.isArray(raw) ? raw : []).reduce(function (sum, item) {
-	                    var qty = Number(item.qty || item.quantity || 1);
-	                    var price = Number(item.price || 0);
-	                    return sum + (qty * price);
-	                  }, 0);
-	                  totalNode.textContent = total.toLocaleString('tr-TR') + ' ₺';
-	                });
-	              }
-	            });
-	          }
-	        });
-	      }
+              var priceNode = itemNode.querySelector('.cart-item-info p');
+              var priceText = priceNode ? priceNode.textContent : '';
+              var numericPrice = Number(String(priceText).replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(',', '.'));
+              if (!isNaN(numericPrice) && numericPrice > 0) {
+                var totals = document.querySelectorAll('.cart-total span:last-child');
+                Array.prototype.forEach.call(totals, function (totalNode) {
+                  var raw;
+                  try {
+                    raw = JSON.parse(localStorage.getItem('cartItems') || '[]');
+                  } catch (error) {
+                    raw = [];
+                  }
+                  var total = (Array.isArray(raw) ? raw : []).reduce(function (sum, item) {
+                    var qty = Number(item.qty || item.quantity || 1);
+                    var price = Number(item.price || 0);
+                    return sum + (qty * price);
+                  }, 0);
+                  totalNode.textContent = total.toLocaleString('tr-TR') + ' ₺';
+                });
+              }
+            });
+          }
+        });
+      }
 
-	      document.addEventListener('DOMContentLoaded', function () {
-	        loadStockMap();
-	        document.addEventListener('click', preventOverAdd, true);
-          window.__boomerPerf.observeBody(function () {
-            decorateCards();
-            decorateCartAndSummary();
-            ensureCartQuantityControls();
-          }, { maxMs: 3500, wait: 160 });
+      document.addEventListener('DOMContentLoaded', function () {
+        loadStockMap();
+        document.addEventListener('click', preventOverAdd, true);
+        window.__boomerPerf.observeBody(function () {
+          decorateCards();
+          decorateCartAndSummary();
+          ensureCartQuantityControls();
+        }, { maxMs: 3500, wait: 160 });
       });
     })();
   </script>
@@ -2237,11 +2301,11 @@
             grid.innerHTML = rows.map(function (row) {
               return '' +
                 '<article class="category-block" data-category-slug="' + String(row.slug || '') + '" tabindex="0">' +
-                  '<img alt="' + String(row.name || '') + '">' +
-                  '<div class="category-block-info">' +
-                    '<h4>' + String(row.name || '') + '</h4>' +
-                    '<a href="#urunler" class="category-link">' + String(row.name || 'Kategori') + ' Setleri Kesfet</a>' +
-                  '</div>' +
+                '<img alt="' + String(row.name || '') + '">' +
+                '<div class="category-block-info">' +
+                '<h4>' + String(row.name || '') + '</h4>' +
+                '<a href="#urunler" class="category-link">' + String(row.name || 'Kategori') + ' Setleri Kesfet</a>' +
+                '</div>' +
                 '</article>';
             }).join('');
           }
@@ -2468,6 +2532,7 @@
     }
 
     @media (max-width: 768px) {
+
       .checkout-modal-container,
       .checkout-modal-container.wide {
         width: calc(100vw - 16px) !important;
@@ -2845,8 +2910,8 @@
           return response.ok
             ? response.json()
             : response.json().catch(function () { return {}; }).then(function (data) {
-                throw new Error(data.message || 'Kategori banner yuklenemedi.');
-              });
+              throw new Error(data.message || 'Kategori banner yuklenemedi.');
+            });
         });
       }
 
@@ -2947,12 +3012,12 @@
           card.innerHTML =
             '<div class="admin-gallery-thumb"><img alt=""></div>' +
             '<div class="admin-gallery-meta">' +
-              '<div style="font-size:.74rem;font-weight:700;color:#0f172a;word-break:break-word;">' + (item.filename || ('Gorsel #' + item.id)) + '</div>' +
-              '<div style="font-size:.7rem;color:#64748b;">' + (item.is_primary ? 'Kapak gorsel' : 'Ek gorsel') + '</div>' +
+            '<div style="font-size:.74rem;font-weight:700;color:#0f172a;word-break:break-word;">' + (item.filename || ('Gorsel #' + item.id)) + '</div>' +
+            '<div style="font-size:.7rem;color:#64748b;">' + (item.is_primary ? 'Kapak gorsel' : 'Ek gorsel') + '</div>' +
             '</div>' +
             '<div class="admin-gallery-actions">' +
-              '<button type="button" class="admin-gallery-btn primary">Kapak</button>' +
-              '<button type="button" class="admin-gallery-btn remove">Sil</button>' +
+            '<button type="button" class="admin-gallery-btn primary">Kapak</button>' +
+            '<button type="button" class="admin-gallery-btn remove">Sil</button>' +
             '</div>';
           card.querySelector('img').src = (item.urls && item.urls.thumb) || item.url;
           if (item.is_primary) {
@@ -2992,12 +3057,12 @@
           card.innerHTML =
             '<div class="admin-gallery-thumb"><img alt=""></div>' +
             '<div class="admin-gallery-meta">' +
-              '<div style="font-size:.74rem;font-weight:700;color:#0f172a;word-break:break-word;">' + item.file.name + '</div>' +
-              '<div style="font-size:.7rem;color:#64748b;">' + Math.round(item.file.size / 1024) + ' KB</div>' +
+            '<div style="font-size:.74rem;font-weight:700;color:#0f172a;word-break:break-word;">' + item.file.name + '</div>' +
+            '<div style="font-size:.7rem;color:#64748b;">' + Math.round(item.file.size / 1024) + ' KB</div>' +
             '</div>' +
             '<div class="admin-gallery-actions">' +
-              '<button type="button" class="admin-gallery-btn primary">Kapak</button>' +
-              '<button type="button" class="admin-gallery-btn remove">Sil</button>' +
+            '<button type="button" class="admin-gallery-btn primary">Kapak</button>' +
+            '<button type="button" class="admin-gallery-btn remove">Sil</button>' +
             '</div>';
           card.querySelector('img').src = item.url;
           if (adminProductState.primaryIndex === index) {
@@ -3042,7 +3107,7 @@
               return file && /^image\//i.test(String(file.type || ''));
             });
             adminProductState.pendingUploads.forEach(function (item) {
-              try { URL.revokeObjectURL(item.url); } catch (e) {}
+              try { URL.revokeObjectURL(item.url); } catch (e) { }
             });
             adminProductState.pendingUploads = [];
             adminProductState.primaryIndex = 0;
@@ -3103,7 +3168,7 @@
           }
           if (resetQueue) {
             adminProductState.pendingUploads.forEach(function (item) {
-              try { URL.revokeObjectURL(item.url); } catch (e) {}
+              try { URL.revokeObjectURL(item.url); } catch (e) { }
             });
             adminProductState.pendingUploads = [];
             adminProductState.primaryIndex = 0;
@@ -3190,7 +3255,7 @@
             : (primaryImage && primaryImage.url ? primaryImage.url : '');
 
           adminProductState.pendingUploads.forEach(function (item) {
-            try { URL.revokeObjectURL(item.url); } catch (e) {}
+            try { URL.revokeObjectURL(item.url); } catch (e) { }
           });
           adminProductState.pendingUploads = [];
           adminProductState.primaryIndex = 0;
@@ -3322,7 +3387,7 @@
                 firstCell.appendChild(badges);
               });
             });
-          }).catch(function () {});
+          }).catch(function () { });
       }
 
       function updateSummary(form, priceInput, desiInput) {
@@ -3703,32 +3768,32 @@
         modal.className = 'product-detail-backdrop';
         modal.innerHTML =
           '<div class="product-detail-modal" role="dialog" aria-modal="true" aria-label="Urun detayi">' +
-            '<div class="product-detail-gallery">' +
-              '<div class="product-detail-main-image"><button type="button" class="product-detail-nav prev" aria-label="Onceki">&#8249;</button><img alt=""><button type="button" class="product-detail-nav next" aria-label="Sonraki">&#8250;</button></div>' +
-              '<div class="product-detail-thumbs"></div>' +
-            '</div>' +
-            '<div class="product-detail-content">' +
-              '<div class="product-detail-top">' +
-                '<div class="product-detail-kicker"></div>' +
-                '<button type="button" class="product-detail-close" aria-label="Kapat">&times;</button>' +
-              '</div>' +
-              '<div class="product-detail-title"></div>' +
-              '<div class="product-detail-price"><strong></strong><s></s></div>' +
-              '<div class="product-detail-description"></div>' +
-              '<div class="product-detail-grid">' +
-                '<div class="product-detail-meta" data-role="category"><span>Kategori</span><strong></strong></div>' +
-                '<div class="product-detail-meta" data-role="stock"><span>Stok Durumu</span><strong></strong></div>' +
-                '<div class="product-detail-meta" data-role="condition"><span>Urun Durumu</span><strong></strong></div>' +
-                '<div class="product-detail-meta" data-role="pieces"><span>Parca Sayisi</span><strong></strong></div>' +
-                '<div class="product-detail-meta" data-role="brand"><span>Marka</span><strong></strong></div>' +
-                '<div class="product-detail-meta" data-role="desi"><span>Desi / Kargo</span><strong></strong></div>' +
-              '</div>' +
-              '<div class="product-detail-note"></div>' +
-              '<div class="product-detail-actions">' +
-                '<button type="button" class="product-detail-add">Sepete Ekle</button>' +
-                '<button type="button" class="product-detail-close">Kapat</button>' +
-              '</div>' +
-            '</div>' +
+          '<div class="product-detail-gallery">' +
+          '<div class="product-detail-main-image"><button type="button" class="product-detail-nav prev" aria-label="Onceki">&#8249;</button><img alt=""><button type="button" class="product-detail-nav next" aria-label="Sonraki">&#8250;</button></div>' +
+          '<div class="product-detail-thumbs"></div>' +
+          '</div>' +
+          '<div class="product-detail-content">' +
+          '<div class="product-detail-top">' +
+          '<div class="product-detail-kicker"></div>' +
+          '<button type="button" class="product-detail-close" aria-label="Kapat">&times;</button>' +
+          '</div>' +
+          '<div class="product-detail-title"></div>' +
+          '<div class="product-detail-price"><strong></strong><s></s></div>' +
+          '<div class="product-detail-description"></div>' +
+          '<div class="product-detail-grid">' +
+          '<div class="product-detail-meta" data-role="category"><span>Kategori</span><strong></strong></div>' +
+          '<div class="product-detail-meta" data-role="stock"><span>Stok Durumu</span><strong></strong></div>' +
+          '<div class="product-detail-meta" data-role="condition"><span>Urun Durumu</span><strong></strong></div>' +
+          '<div class="product-detail-meta" data-role="pieces"><span>Parca Sayisi</span><strong></strong></div>' +
+          '<div class="product-detail-meta" data-role="brand"><span>Marka</span><strong></strong></div>' +
+          '<div class="product-detail-meta" data-role="desi"><span>Desi / Kargo</span><strong></strong></div>' +
+          '</div>' +
+          '<div class="product-detail-note"></div>' +
+          '<div class="product-detail-actions">' +
+          '<button type="button" class="product-detail-add">Sepete Ekle</button>' +
+          '<button type="button" class="product-detail-close">Kapat</button>' +
+          '</div>' +
+          '</div>' +
           '</div>';
 
         modal.addEventListener('click', function (event) {
@@ -4316,10 +4381,10 @@
         modal.className = 'maintenance-modal-backdrop';
         modal.innerHTML =
           '<div class="maintenance-modal" role="dialog" aria-modal="true" aria-label="Blog bakimda">' +
-            '<div class="maintenance-lock">&#128274;</div>' +
-            '<h3>Blog Bakimda</h3>' +
-            '<p>Blog sayfamiz su anda bakimda. Sabriniz icin tesekkurler, en yakin zamanda yeniden acilacak.</p>' +
-            '<button type="button" class="btn-primary maintenance-close">Tamam</button>' +
+          '<div class="maintenance-lock">&#128274;</div>' +
+          '<h3>Blog Bakimda</h3>' +
+          '<p>Blog sayfamiz su anda bakimda. Sabriniz icin tesekkurler, en yakin zamanda yeniden acilacak.</p>' +
+          '<button type="button" class="btn-primary maintenance-close">Tamam</button>' +
           '</div>';
 
         modal.addEventListener('click', function (event) {
